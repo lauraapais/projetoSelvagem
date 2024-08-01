@@ -1,0 +1,143 @@
+:root {
+    --bg-color: #E9E7E1;
+    --text:#252525;
+    --slider: #DEDEDB;
+
+    --minHeader: 10vh;
+  }
+
+  @font-face {
+    font-family: "HelveticaNeue";
+    src: url(data/fonts/HelveticaNeue.ttc);
+  }
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    background-color: var(--bg-color);
+    font-family: "HelveticaNeue";
+    color: var(--text);
+    padding: 3vw;
+}
+
+h3{
+    font-size: calc(11px + 0.390625vw);
+}
+
+h2{
+    font-size: calc(18px + 0.390625vw);
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    min-height: var(--minHeader);
+}
+
+.PS_Logo h2{
+    font-weight: 700;
+    text-transform: uppercase;
+    font-kerning: normal;
+}
+
+.tracksMain{
+    display: flex;
+    width: 25%;
+    justify-content: space-between;
+}
+
+
+.tracks{
+    display: flex;
+    justify-content: space-between;
+    gap:1vw;
+}
+
+aside{
+    width: 18%;
+    height: 100%;
+    display: flex;
+    gap: 1vw;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+main{
+    display: flex;
+    justify-content: space-between;
+    height: calc(100vh - (3vw*2) - var(--minHeader));
+}
+
+
+.mode h3, .tracks h3{
+    cursor: pointer;
+}
+
+.mode h3:hover, .tracks h3:hover{
+    font-weight: bold;
+}
+
+.interactionBase{
+    width:80%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+
+.interactionBase video{
+    width: 100%;
+}
+
+aside input[type=range] {
+    width:80%;
+}
+
+.slider {
+    background: var(--slider);
+    outline: none;
+    transition: opacity .2s;
+    border-radius: 20px;
+}
+
+/*track*/
+.slider::-webkit-slider-runnable-track {
+    background: var(--slider);
+    border-radius: 20px;
+}
+
+.slider::-moz-range-track {
+    background: var(--slider);
+    border-radius: 20px;
+}
+
+.slider::-ms-track {
+    background: var(--slider);
+    border-color: transparent;
+    color: transparent;
+    border-radius: 20px;
+}
+
+/*thumb*/
+.slider::-webkit-slider-thumb {
+    background: var(--text); 
+    cursor: pointer;
+    border-radius: 50%; 
+}
+
+.slider::-moz-range-thumb {
+    background: var(--text); 
+    cursor: pointer;
+    border-radius: 50%; 
+}
+
+.slider::-ms-thumb {
+    background: var(--text); 
+    cursor: pointer;
+    border-radius: 50%; 
+}
+
+.faixa{
+    width:100%;
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projeto Selvagem</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="PS_Logo">
+            <h2>Projeto Selvagem</h2>
+        </div>
+        <div class="tracksMain">
+            <h3>Faixa</h3>
+            <div class="tracks">
+                <h3>1</h3>
+                <h3>2</h3>
+                <h3>3</h3>
+                <h3>4</h3>
+                <h3>5</h3>
+                <h3>6</h3>
+                <h3>7</h3>
+                <h3>8</h3>
+                <h3>9</h3>
+                <h3>10</h3>
+            </div>
+        </div>
+    </header>
+    <main>
+        <aside class="mode">
+            <div class="slidecontainer">
+                <h3>Poesia</h3>
+                <input id="poemSlider" type="range" min="1" max="100" value="100" class="slider">
+            </div>
+            <div class="slidecontainer">
+                <h3>Jazz</h3>
+                <input id="musicSlider" type="range" min="1" max="100" value="100" class="slider">
+            </div>
+            <div class="slidecontainer">
+                <h3>Vídeo</h3>
+                <input id="videoSlider" type="range" min="1" max="100" value="100" class="slider">
+            </div>
+            <div class="slidecontainer">
+                <h3>Legendas</h3>
+                <input type="range" min="1" max="100" value="100" class="slider">
+            </div>
+        </aside>
+
+        <div class="interactionBase">
+            <div class="faixa" id="faixa1">
+                <video id="multimediaVideo1" autoplay muted loop>
+                    <source src="data/faixas/1/1.mp4" type="video/mp4">
+                </video>
+                <audio id="poem1" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+
+                <audio id="music1" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

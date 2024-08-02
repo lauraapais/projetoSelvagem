@@ -24,7 +24,6 @@ playButton.addEventListener('click', async function () {
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
 
-
 function updateSliders(track) {
     const video = track.querySelector('.video');
     const legendas = track.querySelector('.legendas');

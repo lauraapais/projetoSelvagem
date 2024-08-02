@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Projeto Selvagem</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <div class="PS_Logo">
             <h2>Projeto Selvagem</h2>
         </div>
         <div class="tracks">
-                <h3 data-track="faixa1">1</h3>
-                <h3 data-track="faixa2">2</h3>
-                <h3 data-track="faixa3">3</h3>
-                <h3 data-track="faixa4">4</h3>
-                <h3 data-track="faixa5">5</h3>
+            <h3 data-track="faixa1">1</h3>
+            <h3 data-track="faixa2">2</h3>
+            <h3 data-track="faixa3">3</h3>
+            <h3 data-track="faixa4">4</h3>
+            <h3 data-track="faixa5">5</h3>
         </div>
     </header>
     <main>
@@ -39,88 +41,93 @@
 
         <div class="interactionBase">
 
+
             <!--Faixa 1-->
             <div class="faixa" id="faixa1">
-                <video class="video" autoplay muted loop>
+                <div id="playButton" class="play">
+                    <h2>Play</h2>
+                </div>
+                <video class="video" muted loop>
                     <source src="data/faixas/1/1.mp4" type="video/mp4">
                 </video>
-                <video class="legendas" autoplay muted loop>
+                <video class="legendas" muted loop>
                     <source src="data/faixas/1/legendas1.mp4" type="video/mp4">
                 </video>
-                <audio autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
                 </audio>
-                <audio autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
                 </audio>
             </div>
 
             <!--Faixa 2-->
             <div class="faixa" id="faixa2" style="display:none;">
-                <video class="video"  autoplay muted loop>
+                <video class="video" muted loop>
                     <source src="data/faixas/2/2.mp4" type="video/mp4">
                 </video>
-                <video class="legendas"  autoplay muted loop>
+                <video class="legendas" muted loop>
                     <source src="data/faixas/1/legendas1.mp4" type="video/mp4">
                 </video>
-                <audio autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
                 </audio>
-                <audio  autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
                 </audio>
             </div>
 
             <!--Faixa 3-->
             <div class="faixa" id="faixa3" style="display:none;">
-                <video class="video"  autoplay muted loop>
+                <video class="video" muted loop>
                     <source src="data/faixas/3/3.mp4" type="video/mp4">
                 </video>
-                <video class="legendas"  autoplay muted loop>
+                <video class="legendas" muted loop>
                     <source src="data/faixas/1/legendas1.mp4" type="video/mp4">
                 </video>
-                <audio autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
                 </audio>
-                <audio  autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
                 </audio>
             </div>
 
             <!--Faixa 4-->
             <div class="faixa" id="faixa4" style="display:none;">
-                <video class="video"  autoplay muted loop>
+                <video class="video" muted loop>
                     <source src="data/faixas/4/4.mp4" type="video/mp4">
                 </video>
-                <video class="legendas"  autoplay muted loop>
+                <video class="legendas" muted loop>
                     <source src="data/faixas/1/legendas1.mp4" type="video/mp4">
                 </video>
-                <audio autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
                 </audio>
-                <audio  autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
                 </audio>
             </div>
 
             <!--Faixa 5-->
             <div class="faixa" id="faixa5" style="display:none;">
-                <video class="video"  autoplay muted loop>
+                <video class="video" muted loop>
                     <source src="data/faixas/5/5.mp4" type="video/mp4">
                 </video>
-                <video class="legendas"  autoplay muted loop>
+                <video class="legendas" muted loop>
                     <source src="data/faixas/1/legendas1.mp4" type="video/mp4">
                 </video>
-                <audio autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
                 </audio>
-                <audio  autoplay loop>
+                <audio loop>
                     <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
                 </audio>
             </div>
-            
+
         </div>
     </main>
     <script src="script.js"></script>
 </body>
+
 </html>

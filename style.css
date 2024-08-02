@@ -128,23 +128,21 @@ aside input[type=range] {
     border-radius: 50%; 
 }
 
-.interactionBase{
-    width:80%;
+.interactionBase {
+    width: 80%;
     height: 100%;
     display: flex;
     align-items: flex-end;
 }
 
-
-.interactionBase video{
+.interactionBase video {
     width: 100%;
 }
 
-.faixa{
-    width:100%;
+.faixa {
+    width: 100%;
     position: relative;
 }
-
 
 .video {
     width: 100%;
@@ -152,7 +150,7 @@ aside input[type=range] {
 }
 
 .legendas {
-    mix-blend-mode: difference;
+    mix-blend-mode: screen;
     position: absolute;
     top: 0;
     left: 0;

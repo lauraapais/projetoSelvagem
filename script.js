@@ -1,50 +1,60 @@
-// Video
-const videoSlider = document.getElementById('videoSlider');
-const multimediaVideo1 = document.getElementById('multimediaVideo1');
+document.addEventListener('DOMContentLoaded', () => {
+    const tracks = document.querySelectorAll('.tracks h3');
+    let currentTrack = document.getElementById('faixa1');
 
-videoSlider.addEventListener('input', function() {
-    const opacity = videoSlider.value / 100;
-    multimediaVideo1.style.opacity = opacity;
-});
+    tracks.forEach(track => {
+        track.addEventListener('click', () => {
+            const trackId = track.getAttribute('data-track');
+            const newTrack = document.getElementById(trackId);
 
-// Legendas
-const legendasSlider = document.getElementById('legendasSlider');
-const legendas1 = document.getElementById('legendas1');
+            if (currentTrack !== newTrack) {
+                currentTrack.style.display = 'none';
+                newTrack.style.display = 'block';
+                currentTrack = newTrack;
 
-legendasSlider.addEventListener('input', function() {
-    const opacity = legendasSlider.value / 100;
-    legendas1.style.opacity = opacity;
-});
- 
-// Poem
-const poemSlider = document.getElementById('poemSlider');
-const poem1 = document.getElementById('poem1');
+                // Update sliders for the new active track
+                updateSliders(currentTrack);
+            }
+        });
+    });
 
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const gainNodePoem = audioContext.createGain();
-const sourcePoem = audioContext.createMediaElementSource(poem1);
-sourcePoem.connect(gainNodePoem);
-gainNodePoem.connect(audioContext.destination);
+    function updateSliders(track) {
+        const video = track.querySelector('.video');
+        const legendas = track.querySelector('.legendas');
+        const poem = track.querySelector('audio');
+        const music = track.querySelectorAll('audio')[1];
 
-gainNodePoem.gain.value = poemSlider.value / 100;
+        const videoSlider = document.getElementById('videoSlider');
+        videoSlider.addEventListener('input', () => {
+            video.style.opacity = videoSlider.value / 100;
+        });
 
-poemSlider.addEventListener('input', function() {
-    const gainValue = poemSlider.value / 100;
-    gainNodePoem.gain.value = gainValue;
-});
+        const legendasSlider = document.getElementById('legendasSlider');
+        legendasSlider.addEventListener('input', () => {
+            legendas.style.opacity = legendasSlider.value / 100;
+        });
 
-// Music
-const musicSlider = document.getElementById('musicSlider');
-const music1 = document.getElementById('music1');
+        const poemSlider = document.getElementById('poemSlider');
+        const gainNodePoem = audioContext.createGain();
+        const sourcePoem = audioContext.createMediaElementSource(poem);
+        sourcePoem.connect(gainNodePoem);
+        gainNodePoem.connect(audioContext.destination);
+        gainNodePoem.gain.value = poemSlider.value / 100;
+        poemSlider.addEventListener('input', () => {
+            gainNodePoem.gain.value = poemSlider.value / 100;
+        });
 
-const gainNodeMusic = audioContext.createGain();
-const sourceMusic = audioContext.createMediaElementSource(music1);
-sourceMusic.connect(gainNodeMusic);
-gainNodeMusic.connect(audioContext.destination);
+        const musicSlider = document.getElementById('musicSlider');
+        const gainNodeMusic = audioContext.createGain();
+        const sourceMusic = audioContext.createMediaElementSource(music);
+        sourceMusic.connect(gainNodeMusic);
+        gainNodeMusic.connect(audioContext.destination);
+        gainNodeMusic.gain.value = musicSlider.value / 100;
+        musicSlider.addEventListener('input', () => {
+            gainNodeMusic.gain.value = musicSlider.value / 100;
+        });
+    }
 
-gainNodeMusic.gain.value = musicSlider.value / 100;
-
-musicSlider.addEventListener('input', function() {
-    const gainValue = musicSlider.value / 100;
-    gainNodeMusic.gain.value = gainValue;
+    // Initialize sliders for the first track
+    updateSliders(currentTrack);
 });

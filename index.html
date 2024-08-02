@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Projeto Selvagem</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <header>
         <div class="PS_Logo">
@@ -37,7 +39,7 @@
             </div>
             <div class="slidecontainer">
                 <h3>Vídeo</h3>
-                <input id="videoSlider"ß type="range" min="1" max="100" value="100" class="slider">
+                <input id="videoSlider" ß type="range" min="1" max="100" value="100" class="slider">
             </div>
             <div class="slidecontainer">
                 <h3>Legendas</h3>
@@ -53,15 +55,37 @@
                 <video class="legendas" id="legendas1" autoplay muted loop>
                     <source src="data/faixas/1/legendas1.mp4" type="video/mp4">
                 </video>
-                <audio id="poem1" autoplay>
+                <audio id="poem1"  loop>
                     <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
-                  </audio>
-                <audio id="music1" autoplay>
+                </audio>
+                <audio id="music1" loop>
                     <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
-                  </audio>
+                </audio>
             </div>
+
+        
         </div>
     </main>
     <script src="script.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', (event) => {
+        const audio = document.getElementById('music1');
+    
+        // Function to play the audio
+        const playAudio = () => {
+            audio.play();
+            // Remove event listener after first interaction
+            document.removeEventListener('click', playAudio);
+            document.removeEventListener('scroll', playAudio);
+            document.removeEventListener('mousemove', playAudio);
+            document.removeEventListener('keydown', playAudio);
+        };
+    
+        // Add event listeners for various user interactions
+        document.addEventListener('click', playAudio);
+        document.addEventListener('scroll', playAudio);
+        document.addEventListener('mousemove', playAudio);
+        document.addEventListener('keydown', playAudio);
+    });</script>
 </body>
+
 </html>

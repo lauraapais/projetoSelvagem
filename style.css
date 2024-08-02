@@ -78,17 +78,7 @@ main{
     font-weight: bold;
 }
 
-.interactionBase{
-    width:80%;
-    height: 100%;
-    display: flex;
-    align-items: flex-end;
-}
 
-
-.interactionBase video{
-    width: 100%;
-}
 
 aside input[type=range] {
     width:80%;
@@ -136,6 +126,18 @@ aside input[type=range] {
     background: var(--text); 
     cursor: pointer;
     border-radius: 50%; 
+}
+
+.interactionBase{
+    width:80%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+}
+
+
+.interactionBase video{
+    width: 100%;
 }
 
 .faixa{

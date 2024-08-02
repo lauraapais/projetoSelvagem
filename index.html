@@ -69,10 +69,22 @@
     <script src="script.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-    const audio = document.getElementById('music1');
+    const music = document.getElementById('music1');
+    const poem = document.getElementById('poem1');
+    
 
     const playAudio = () => {
-        audio.play().then(() => {
+        music.play().then(() => {
+            // Remove event listeners after the audio starts playing
+            document.removeEventListener('click', playAudio);
+            document.removeEventListener('scroll', playAudio);
+            document.removeEventListener('mousemove', playAudio);
+            document.removeEventListener('keydown', playAudio);
+        }).catch((error) => {
+            console.error('Failed to play audio:', error);
+        });
+
+        poem.play().then(() => {
             // Remove event listeners after the audio starts playing
             document.removeEventListener('click', playAudio);
             document.removeEventListener('scroll', playAudio);

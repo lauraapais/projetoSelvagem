@@ -1,6 +1,5 @@
-
 const playButton = document.querySelector('#playButton');
-let isPlaying = false; 
+let isPlaying = false;
 let sourcePoem = null;
 let sourceMusic = null;
 
@@ -11,7 +10,7 @@ const gainNodeMusic = audioContext.createGain();
 playButton.addEventListener('click', async function () {
     playButton.style.display = "none";
     playButton.style.opacity = "0";
-    isPlaying = true; 
+    isPlaying = true;
 
     // Resume audio context after user interaction
     if (audioContext.state === 'suspended') {
@@ -23,6 +22,7 @@ playButton.addEventListener('click', async function () {
 
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
+let trackTimes = {};
 
 function updateSliders(track) {
     const video = track.querySelector('.video');
@@ -52,6 +52,45 @@ function updateSliders(track) {
     gainNodeMusic.gain.value = musicSlider.value / 100;
     musicSlider.oninput = () => gainNodeMusic.gain.value = musicSlider.value / 100;
 
+    if(currentTrack && isPlaying){
+    video.play();
+    poem.play();
+    music.play();
+    legendas.play();
+    }
+}
+
+function saveTrackTimes(track) {
+    const video = track.querySelector('.video');
+    const poem = track.querySelector('audio:nth-of-type(1)');
+    const music = track.querySelector('audio:nth-of-type(2)');
+    const legendas = track.querySelector('.legendas');
+
+    trackTimes[track.id] = {
+        video: video.currentTime,
+        poem: poem.currentTime,
+        music: music.currentTime,
+        legendas: legendas.currentTime
+    };
+
+    video.pause();
+    poem.pause();
+    music.pause();
+    legendas.pause();
+}
+
+function restoreTrackTimes(track) {
+    const video = track.querySelector('.video');
+    const poem = track.querySelector('audio:nth-of-type(1)');
+    const music = track.querySelector('audio:nth-of-type(2)');
+    const legendas = track.querySelector('.legendas');
+
+    if (trackTimes[track.id]) {
+        video.currentTime = trackTimes[track.id].video;
+        poem.currentTime = trackTimes[track.id].poem;
+        music.currentTime = trackTimes[track.id].music;
+        legendas.currentTime = trackTimes[track.id].legendas;
+    }
 }
 
 function playCurrentTrackMedia() {
@@ -75,6 +114,8 @@ function playCurrentTrackMedia() {
     sourceMusic = audioContext.createMediaElementSource(music);
     sourceMusic.connect(gainNodeMusic).connect(audioContext.destination);
 
+    restoreTrackTimes(currentTrack);
+
     video.play();
     poem.play();
     music.play();
@@ -87,6 +128,8 @@ tracks.forEach(track => {
         const newTrack = document.getElementById(trackId);
 
         if (currentTrack !== newTrack) {
+            saveTrackTimes(currentTrack);
+
             currentTrack.style.display = 'none';
             newTrack.style.display = 'block';
             currentTrack = newTrack;

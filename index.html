@@ -67,25 +67,29 @@
         </div>
     </main>
     <script src="script.js"></script>
-    <script>document.addEventListener('DOMContentLoaded', (event) => {
-        const audio = document.getElementById('music1');
-    
-        // Function to play the audio
-        const playAudio = () => {
-            audio.play();
-            // Remove event listener after first interaction
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const audio = document.getElementById('music1');
+
+    const playAudio = () => {
+        audio.play().then(() => {
+            // Remove event listeners after the audio starts playing
             document.removeEventListener('click', playAudio);
             document.removeEventListener('scroll', playAudio);
             document.removeEventListener('mousemove', playAudio);
             document.removeEventListener('keydown', playAudio);
-        };
-    
-        // Add event listeners for various user interactions
-        document.addEventListener('click', playAudio);
-        document.addEventListener('scroll', playAudio);
-        document.addEventListener('mousemove', playAudio);
-        document.addEventListener('keydown', playAudio);
-    });</script>
+        }).catch((error) => {
+            console.error('Failed to play audio:', error);
+        });
+    };
+
+    // Add event listeners for various user interactions
+    document.addEventListener('click', playAudio);
+    document.addEventListener('scroll', playAudio);
+    document.addEventListener('mousemove', playAudio);
+    document.addEventListener('keydown', playAudio);
+});
+</script>
 </body>
 
 </html>

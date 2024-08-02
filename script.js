@@ -1,12 +1,22 @@
+
 const playButton = document.querySelector('#playButton');
 let isPlaying = false; 
 let sourcePoem = null;
 let sourceMusic = null;
 
-playButton.addEventListener('click', function () {
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const gainNodePoem = audioContext.createGain();
+const gainNodeMusic = audioContext.createGain();
+
+playButton.addEventListener('click', async function () {
     playButton.style.display = "none";
     playButton.style.opacity = "0";
     isPlaying = true; 
+
+    // Resume audio context after user interaction
+    if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+    }
 
     playCurrentTrackMedia();
 });
@@ -14,9 +24,6 @@ playButton.addEventListener('click', function () {
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
 
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const gainNodePoem = audioContext.createGain();
-const gainNodeMusic = audioContext.createGain();
 
 function updateSliders(track) {
     const video = track.querySelector('.video');

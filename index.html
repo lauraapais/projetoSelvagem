@@ -41,14 +41,17 @@
             </div>
             <div class="slidecontainer">
                 <h3>Legendas</h3>
-                <input type="range" min="1" max="100" value="100" class="slider">
+                <input id="legendasSlider" type="range" min="1" max="100" value="100" class="slider">
             </div>
         </aside>
 
         <div class="interactionBase">
             <div class="faixa" id="faixa1">
-                <video id="multimediaVideo1" autoplay muted loop>
+                <video class="video" id="multimediaVideo1" autoplay muted loop>
                     <source src="data/faixas/1/1.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" id="legendas1" autoplay muted loop>
+                    <source src="data/faixas/1/legendas1.mp4" type="video/mp4">
                 </video>
                 <audio id="poem1" autoplay>
                     <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">

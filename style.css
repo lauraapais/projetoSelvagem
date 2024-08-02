@@ -140,4 +140,20 @@ aside input[type=range] {
 
 .faixa{
     width:100%;
+    position: relative;
+}
+
+
+.video {
+    width: 100%;
+    height: auto;
+}
+
+.legendas {
+    mix-blend-mode: difference;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
 }

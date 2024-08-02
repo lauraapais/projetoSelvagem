@@ -7,6 +7,15 @@ videoSlider.addEventListener('input', function() {
     multimediaVideo1.style.opacity = opacity;
 });
 
+// Legendas
+const legendasSlider = document.getElementById('legendasSlider');
+const legendas1 = document.getElementById('legendas1');
+
+legendasSlider.addEventListener('input', function() {
+    const opacity = legendasSlider.value / 100;
+    legendas1.style.opacity = opacity;
+});
+ 
 // Poem
 const poemSlider = document.getElementById('poemSlider');
 const poem1 = document.getElementById('poem1');

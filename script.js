@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+
     const tracks = document.querySelectorAll('.tracks h3');
     let currentTrack = document.getElementById('faixa1');
 
@@ -56,4 +56,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize sliders for the first track
     updateSliders(currentTrack);
-});

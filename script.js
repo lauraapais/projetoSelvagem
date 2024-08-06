@@ -17,6 +17,7 @@ playButton.addEventListener('click', async function () {
         await audioContext.resume();
     }
 
+    enableSliders();
     playCurrentTrackMedia();
 });
 
@@ -36,12 +37,16 @@ function updateSliders(track) {
     videoSlider.value = video.style.opacity * 100 || 100;
     video.style.opacity = videoSlider.value / 100;
     videoSlider.oninput = () => video.style.opacity = videoSlider.value / 100;
+    videoSlider.disabled = !isPlaying;
+    videoSlider.style.opacity = isPlaying ? 1 : 0.5;
 
     // Update Legendas Slider
     const legendasSlider = document.getElementById('legendasSlider');
     legendasSlider.value = legendas.style.opacity * 100 || 100;
     legendas.style.opacity = legendasSlider.value / 100;
     legendasSlider.oninput = () => legendas.style.opacity = legendasSlider.value / 100;
+    legendasSlider.disabled = !isPlaying;
+    legendasSlider.style.opacity = isPlaying ? 1 : 0.5;
 
     // Update Poem Slider
     const poemSlider = document.getElementById('poemSlider');
@@ -51,6 +56,8 @@ function updateSliders(track) {
         gainNodePoem.gain.value = poemSlider.value / 100;
         sliderValues[track.id].poem = poemSlider.value;
     };
+    poemSlider.disabled = !isPlaying;
+    poemSlider.style.opacity = isPlaying ? 1 : 0.5;
 
     // Update Music Slider
     const musicSlider = document.getElementById('musicSlider');
@@ -60,6 +67,8 @@ function updateSliders(track) {
         gainNodeMusic.gain.value = musicSlider.value / 100;
         sliderValues[track.id].music = musicSlider.value;
     };
+    musicSlider.disabled = !isPlaying;
+    musicSlider.style.opacity = isPlaying ? 1 : 0.5;
 
     if(currentTrack && isPlaying){
         video.play();
@@ -120,6 +129,14 @@ function playCurrentTrackMedia() {
     poem.play();
     music.play();
     legendas.play();
+}
+
+function enableSliders() {
+    const sliders = document.querySelectorAll('#videoSlider, #legendasSlider, #poemSlider, #musicSlider');
+    sliders.forEach(slider => {
+        slider.disabled = false;
+        slider.style.opacity = 1;
+    });
 }
 
 tracks.forEach(track => {

@@ -79,49 +79,57 @@ aside input[type=range] {
     width:80%;
 }
 
+
+
 .slider {
-    background: var(--slider);
+    appearance: none;
+    background: #252525;
     outline: none;
-    transition: opacity .2s;
-    border-radius: 20px;
+    border-radius: 50px;
+    height: 1.5px;
 }
 
-/*track*/
-.slider::-webkit-slider-runnable-track {
-    background: var(--slider);
-    border-radius: 20px;
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #252525;
+    cursor: pointer;
+}
+
+/* For Firefox */
+.slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #252525;
+    cursor: pointer;
 }
 
 .slider::-moz-range-track {
-    background: var(--slider);
-    border-radius: 20px;
+    height: 1.5px; /* Ensure the track height matches */
+    background: #252525;
+    border-radius: 50px;
+}
+
+/* For Internet Explorer */
+.slider::-ms-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #252525;
+    cursor: pointer;
 }
 
 .slider::-ms-track {
-    background: var(--slider);
-    border-color: transparent;
-    color: transparent;
-    border-radius: 20px;
+    height: 1.5px;
+    background: #252525;
+    border-radius: 50px;
+    border: none;
+    color: transparent; /* To hide the default track */
 }
 
-/*thumb*/
-.slider::-webkit-slider-thumb {
-    background: var(--text); 
-    cursor: pointer;
-    border-radius: 50%; 
-}
-
-.slider::-moz-range-thumb {
-    background: var(--text); 
-    cursor: pointer;
-    border-radius: 50%; 
-}
-
-.slider::-ms-thumb {
-    background: var(--text); 
-    cursor: pointer;
-    border-radius: 50%; 
-}
 
 .interactionBase {
     width: 80%;
@@ -169,6 +177,8 @@ aside input[type=range] {
     background-color: var(--bg-color);
     opacity: 90%;
     transition: opacity 2s;
+
+    font-weight: 300;
 }
 
 
@@ -177,4 +187,9 @@ aside input[type=range] {
     color: var(--text);
     text-align: center;
     cursor:pointer;
+}
+
+
+.slidecontainer h3{
+    margin-bottom: 0.5vw;
 }

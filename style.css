@@ -56,7 +56,7 @@
 }
 
 body {
-    background-color: var(--text);
+    background-color: black;
     font-family: "HelveticaNeue";
     color: var(--bg-color);
     padding: 0;
@@ -81,10 +81,8 @@ header {
 }
 
 .headerBackground{
-    filter: blur(50px);
     width: 100vw;
     height: var(--minHeader);
-    background-color: black;
 }
 
 .headerContent{
@@ -105,8 +103,7 @@ header {
 
 .tracks {
     display: flex;
-    justify-content: space-between;
-    
+    justify-content: space-between;   
 }
 
 .tracks h3 {
@@ -203,6 +200,7 @@ aside input[type=range] {
     width: 100%;
     height: 100vh;
     object-fit: cover;
+    object-position: center;
 }
 
 .faixa {
@@ -349,7 +347,6 @@ aside input[type=range] {
     }
 
     .interactionBase video {
-        height: 70vh;
         object-fit: cover;
         width: 100%;
     }

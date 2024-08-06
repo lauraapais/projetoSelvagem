@@ -4,6 +4,10 @@
     --slider: #DEDEDB;
 
     --minHeader: 10vh;
+    --minHeaderMobile: 5vh;
+    
+
+--margin:3vw;
 }
 
 @font-face {
@@ -20,7 +24,7 @@ body {
     background-color: var(--bg-color);
     font-family: "HelveticaNeue";
     color: var(--text);
-    padding: 3vw;
+    padding: var(--margin);
 }
 
 h3 {
@@ -102,7 +106,6 @@ aside input[type=range] {
     cursor: pointer;
 }
 
-/* For Firefox */
 .slider::-moz-range-thumb {
     width: 16px;
     height: 16px;
@@ -113,12 +116,10 @@ aside input[type=range] {
 
 .slider::-moz-range-track {
     height: 1.5px;
-    /* Ensure the track height matches */
     background: #252525;
     border-radius: 50px;
 }
 
-/* For Internet Explorer */
 .slider::-ms-thumb {
     width: 16px;
     height: 16px;
@@ -133,7 +134,6 @@ aside input[type=range] {
     border-radius: 50px;
     border: none;
     color: transparent;
-    /* To hide the default track */
 }
 
 
@@ -202,7 +202,7 @@ aside input[type=range] {
 
 
 
-/* Tablet styles */
+/* Tablet*/
 @media (max-width: 1199px) and (min-width: 768px) {
     h3 {
         font-size: calc(14px + 0.390625vw);
@@ -214,6 +214,11 @@ aside input[type=range] {
 
     main {
         flex-direction: column-reverse;
+        height: calc(100vh - (3vw*2) - var(--minHeaderMobile));
+    }
+
+    header {
+        min-height: var(--minHeaderMobile);
     }
 
     .interactionBase {
@@ -241,7 +246,7 @@ aside input[type=range] {
     }
 }
 
-/* Mobile styles */
+/* Mobile*/
 @media (max-width: 767px) {
     h3 {
         font-size: calc(14px + 0.390625vw);
@@ -253,6 +258,11 @@ aside input[type=range] {
 
     main {
         flex-direction: column-reverse;
+        height: calc(100vh - (3vw*2) - var(--minHeaderMobile));
+    }
+
+    header {
+        min-height: var(--minHeaderMobile);
     }
 
     .interactionBase {
@@ -265,6 +275,7 @@ aside input[type=range] {
         height: max-content;
         width: 100%;
         align-items: center;
+        padding: var(--margin) 0 ;
     }
 
     aside input[type=range] {
@@ -277,5 +288,11 @@ aside input[type=range] {
 
     .slidecontainer h3 {
         text-align: center;
+    }
+
+    .interactionBase video{
+        height: 70vh;
+        object-fit: cover;
+        width: 100%;
     }
 }

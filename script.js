@@ -23,6 +23,7 @@ playButton.addEventListener('click', async function () {
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
 let trackTimes = {};
+let sliderValues = {};
 
 function updateSliders(track) {
     const video = track.querySelector('.video');
@@ -44,19 +45,27 @@ function updateSliders(track) {
 
     // Update Poem Slider
     const poemSlider = document.getElementById('poemSlider');
+    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 100;
     gainNodePoem.gain.value = poemSlider.value / 100;
-    poemSlider.oninput = () => gainNodePoem.gain.value = poemSlider.value / 100;
+    poemSlider.oninput = () => {
+        gainNodePoem.gain.value = poemSlider.value / 100;
+        sliderValues[track.id].poem = poemSlider.value;
+    };
 
     // Update Music Slider
     const musicSlider = document.getElementById('musicSlider');
+    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 100;
     gainNodeMusic.gain.value = musicSlider.value / 100;
-    musicSlider.oninput = () => gainNodeMusic.gain.value = musicSlider.value / 100;
+    musicSlider.oninput = () => {
+        gainNodeMusic.gain.value = musicSlider.value / 100;
+        sliderValues[track.id].music = musicSlider.value;
+    };
 
     if(currentTrack && isPlaying){
-    video.play();
-    poem.play();
-    music.play();
-    legendas.play();
+        video.play();
+        poem.play();
+        music.play();
+        legendas.play();
     }
 }
 
@@ -99,15 +108,6 @@ function playCurrentTrackMedia() {
     const music = currentTrack.querySelector('audio:nth-of-type(2)');
     const legendas = currentTrack.querySelector('.legendas');
 
-    // Disconnect previous audio sources if they exist
-    if (sourcePoem) {
-        sourcePoem.disconnect();
-    }
-    if (sourceMusic) {
-        sourceMusic.disconnect();
-    }
-
-    // Create new MediaElementSource and connect to gain nodes
     sourcePoem = audioContext.createMediaElementSource(poem);
     sourcePoem.connect(gainNodePoem).connect(audioContext.destination);
     
@@ -142,5 +142,6 @@ tracks.forEach(track => {
     });
 });
 
-// Initialize sliders for the first track
+// Initialize slider values and sliders for the first track
+sliderValues[currentTrack.id] = { poem: 100, music: 100 };
 updateSliders(currentTrack);

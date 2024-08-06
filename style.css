@@ -47,12 +47,14 @@ header {
     font-kerning: normal;
 }
 
-
-
 .tracks {
     display: flex;
-    width: 10%;
     justify-content: space-between;
+   
+}
+
+.tracks h3{
+    margin-left: calc(var(--margin)/2);
 }
 
 aside {
@@ -294,5 +296,9 @@ aside input[type=range] {
         height: 70vh;
         object-fit: cover;
         width: 100%;
+    }
+
+    .tracks h3{
+        margin-left: var(--margin);
     }
 }

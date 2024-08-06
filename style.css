@@ -205,11 +205,11 @@ aside input[type=range] {
 /* Tablet styles */
 @media (max-width: 1199px) and (min-width: 768px) {
     h3 {
-        font-size: calc(13px + 0.390625vw);
+        font-size: calc(14px + 0.390625vw);
     }
 
     h2 {
-        font-size: calc(20px + 0.390625vw);
+        font-size: calc(18px + 0.390625vw);
     }
 
     main {
@@ -244,11 +244,11 @@ aside input[type=range] {
 /* Mobile styles */
 @media (max-width: 767px) {
     h3 {
-        font-size: calc(13px + 0.390625vw);
+        font-size: calc(14px + 0.390625vw);
     }
 
     h2 {
-        font-size: calc(20px + 0.390625vw);
+        font-size: calc(18px + 0.390625vw);
     }
 
     main {

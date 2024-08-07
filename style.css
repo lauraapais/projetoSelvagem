@@ -63,6 +63,10 @@ body {
     margin: 0;
 }
 
+h4 {
+    font-size: calc(8px + 0.390625vw);
+}
+
 h3 {
     font-size: calc(11px + 0.390625vw);
 }
@@ -78,6 +82,7 @@ header {
     position: relative;
     z-index: 10;
     padding: var(--margin) var(--margin) 0 var(--margin);
+    backdrop-filter: blur(2px);
 }
 
 .headerBackground{
@@ -230,7 +235,7 @@ aside input[type=range] {
     align-items: center;
     justify-content: center;
     z-index: 200;
-    background-color: #000000;
+    backdrop-filter: blur(100px);
     opacity: 90%;
     transition: opacity 2s;
     font-weight: 300;

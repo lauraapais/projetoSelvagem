@@ -103,6 +103,7 @@ header {
     font-kerning: normal;
     font-family: "PPformula";
     font-size: calc(60px + 0.390625vw);
+    line-height: calc(65px + 0.390625vw);
     mix-blend-mode: difference;
 }
 
@@ -329,7 +330,7 @@ aside input[type=range] {
     }
 
     h2 {
-        font-size: calc(30px + 0.390625vw);
+        font-size: calc(20px + 0.390625vw);
     }
 
     h4{
@@ -391,9 +392,7 @@ aside input[type=range] {
         margin-left: var(--margin);
     }
 
-    .PS_Logo h2 {
-        line-height: calc(90px + 0.390625vw);
-    }
+   
 
     .play h2{
         padding: 2vw 3vw;

@@ -69,7 +69,7 @@ function updateSliders(track) {
     musicSlider.disabled = !isPlaying;
     musicSlider.style.opacity = isPlaying ? 1 : 0.5;
 
-    if(currentTrack && isPlaying){
+    if (currentTrack && isPlaying) {
         video.play();
         poem.play();
         music.play();
@@ -118,7 +118,7 @@ function playCurrentTrackMedia() {
 
     sourcePoem = audioContext.createMediaElementSource(poem);
     sourcePoem.connect(gainNodePoem).connect(audioContext.destination);
-    
+
     sourceMusic = audioContext.createMediaElementSource(music);
     sourceMusic.connect(gainNodeMusic).connect(audioContext.destination);
 
@@ -158,102 +158,88 @@ tracks.forEach(track => {
     });
 });
 
-function handleMouseMove(event) {
-    if (!isPlaying) return;
+let windowWidth, windowHeight;
 
-    const video = currentTrack.querySelector('.video');
-    const screenWidth = window.innerWidth;
-    const mouseX = event.clientX;
+const video = currentTrack.querySelector('.video');
+const videoSlider = document.getElementById('videoSlider');
 
-    // Calculate margins (5% of the screen width)
-    const margin = screenWidth * 0.05;
-    const effectiveWidth = screenWidth - 2 * margin;
+const legendas = currentTrack.querySelector('.legendas');
+const legendasSlider = document.getElementById('legendasSlider');
 
-    // Calculate the opacity based on mouseX position within the effective width
-    let opacity = (mouseX - margin) / effectiveWidth;
-    opacity = Math.min(1, Math.max(0, opacity));
-    video.style.opacity = opacity;
+//gainNodeMusic
+const musicSlider = document.getElementById('musicSlider');
 
-    // Update the slider for display purposes
-    const videoSlider = document.getElementById('videoSlider');
-    videoSlider.value = opacity * 100;
+//gainNodePoem
+const poemSlider = document.getElementById('poemSlider');
+
+
+let videoSliderInitial, legendasSliderInitial, musicSliderInitial, poemSliderInitial;
+let startX, startY, currentX, currentY, deltaX, deltaY, normalizedX, normalizedY;
+let isDragging = false, isDoubleClick = false;
+let clickTimeout;
+
+function windowSize() {
+    windowWidth = window.innerWidth;
+    windowHeight = window.innerHeight;
 }
 
-function handleMouseMoveY(event) {
-    if (!isPlaying) return;
+windowSize();
 
-    const legendas = currentTrack.querySelector('.legendas');
-    const screenHeight = window.innerHeight;
-    const mouseY = event.clientY;
-
-    // Calculate margins (5% of the screen height)
-    const margin = screenHeight * 0.05;
-    const effectiveHeight = screenHeight - 2 * margin;
-
-    // Calculate the opacity based on mouseY position within the effective height
-    let opacity = (mouseY - margin) / effectiveHeight;
-    opacity = Math.min(1, Math.max(0, opacity));
-    legendas.style.opacity = opacity;
-
-    // Update the slider for display purposes (optional)
-    const legendasSlider = document.getElementById('legendasSlider');
-    legendasSlider.value = opacity * 100;
-}
-
-function handleMouseDown() {
-    if (!isPlaying) return;
-
-    isMouseDown = true;
-    changeVolume();
-}
-
-function handleMouseUp() {
-    isMouseDown = false;
-}
-
-function handleMouseLeave() {
-    isMouseDown = false;
-}
-
-function changeVolume() {
-    const musicSlider = document.getElementById('musicSlider');
-    let currentVolume = gainNodeMusic.gain.value;
-
-    function adjustVolume() {
-        if (!isMouseDown) return;
-
-        if (increasingVolume) {
-            currentVolume += 0.01;
-            if (currentVolume >= 1) {
-                currentVolume = 1;
-                increasingVolume = false;
-            }
-        } else {
-            currentVolume -= 0.01;
-            if (currentVolume <= 0) {
-                currentVolume = 0;
-                increasingVolume = true;
-            }
-        }
-
-        gainNodeMusic.gain.value = currentVolume;
-        musicSlider.value = currentVolume * 100;
-
-        setTimeout(adjustVolume, 50); // Adjust volume every 50 milliseconds
+document.addEventListener('mousedown', (event) => {
+    if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+        isDoubleClick = true;
+    } else {
+        isDoubleClick = false;
+        clickTimeout = setTimeout(() => {
+            clickTimeout = null;
+        }, 300);
     }
 
-    adjustVolume();
-}
+    isDragging = true;
+    startX = event.clientX;
+    startY = event.clientY;
+    currentX = startX;
+    currentY = startY;
 
-// Listen for mouse movement
-document.addEventListener('mousemove', handleMouseMove);
-document.addEventListener('mousemove', handleMouseMoveY);
+    videoSliderInitial = parseInt(videoSlider.value);
+    legendasSliderInitial = parseInt(legendasSlider.value);
+    musicSliderInitial = parseInt(musicSlider.value);
+    poemSliderInitial = parseInt(poemSlider.value);
+});
 
-// Listen for mouse down, up, and leave to adjust volume
-document.addEventListener('mousedown', handleMouseDown);
-document.addEventListener('mouseup', handleMouseUp);
-document.addEventListener('mouseleave', handleMouseLeave);
+document.addEventListener('mousemove', (event) => {
+    if (isDragging) {
+        currentX = event.clientX;
+        currentY = event.clientY;
+        deltaX = currentX - startX;
+        deltaY = currentY - startY;
 
-// Initialize slider values and sliders for the first track
-sliderValues[currentTrack.id] = { poem: 100, music: 100 };
-updateSliders(currentTrack);
+        normalizedX = Math.min(1, Math.max(-1, deltaX / windowWidth));
+        normalizedY = Math.min(1, Math.max(-1, deltaY / windowHeight));
+
+        if (!isDoubleClick) {
+            video.style.opacity = Math.min(1, Math.max(0, videoSliderInitial / 100 + normalizedX));
+            videoSlider.value = Math.min(100, Math.max(0, videoSliderInitial + normalizedX * 100));
+
+            legendas.style.opacity = Math.min(1, Math.max(0, legendasSliderInitial / 100 + normalizedY));
+            legendasSlider.value = Math.min(100, Math.max(0, legendasSliderInitial + normalizedY * 100));
+        } else {
+            gainNodeMusic.gain.value = Math.min(1, Math.max(0, musicSliderInitial / 100 + normalizedX));
+            musicSlider.value = Math.min(100, Math.max(0, musicSliderInitial + normalizedX * 100));
+
+            gainNodePoem.gain.value = Math.min(1, Math.max(0, poemSliderInitial / 100 + normalizedY));
+            poemSlider.value = Math.min(100, Math.max(0, poemSliderInitial + normalizedY * 100));
+        }
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    isDragging = false;
+    isDoubleClick = false;
+
+    console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
+});
+
+window.addEventListener("resize", windowSize);

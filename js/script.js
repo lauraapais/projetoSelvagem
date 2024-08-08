@@ -188,7 +188,13 @@ function windowSize() {
 
 windowSize();
 
-document.addEventListener('mousedown', (event) => {
+function handleStart(event) {
+    event.preventDefault();
+
+    // Support for both mouse and touch
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
     if (clickTimeout) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
@@ -201,8 +207,8 @@ document.addEventListener('mousedown', (event) => {
     }
 
     isDragging = true;
-    startX = event.clientX;
-    startY = event.clientY;
+    startX = clientX;
+    startY = clientY;
     currentX = startX;
     currentY = startY;
 
@@ -210,12 +216,18 @@ document.addEventListener('mousedown', (event) => {
     legendasSliderInitial = parseInt(legendasSlider.value);
     musicSliderInitial = parseInt(musicSlider.value);
     poemSliderInitial = parseInt(poemSlider.value);
-});
+}
 
-document.addEventListener('mousemove', (event) => {
+function handleMove(event) {
     if (isDragging) {
-        currentX = event.clientX;
-        currentY = event.clientY;
+        event.preventDefault();
+
+        // Support for both mouse and touch
+        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+        currentX = clientX;
+        currentY = clientY;
         deltaX = currentX - startX;
         deltaY = currentY - startY;
 
@@ -236,13 +248,22 @@ document.addEventListener('mousemove', (event) => {
             poemSlider.value = Math.min(100, Math.max(0, poemSliderInitial + normalizedY * 100));
         }
     }
-});
+}
 
-document.addEventListener('mouseup', () => {
+function handleEnd(event) {
     isDragging = false;
     isDoubleClick = false;
 
     console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
-});
+}
+
+// Add event listeners for both mouse and touch events
+document.addEventListener('mousedown', handleStart);
+document.addEventListener('mousemove', handleMove);
+document.addEventListener('mouseup', handleEnd);
+
+document.addEventListener('touchstart', handleStart, { passive: false });
+document.addEventListener('touchmove', handleMove, { passive: false });
+document.addEventListener('touchend', handleEnd);
 
 window.addEventListener("resize", windowSize);

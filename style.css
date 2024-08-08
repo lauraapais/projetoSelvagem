@@ -390,6 +390,7 @@ aside input[type=range] {
 
     .tracks h3 {
         margin-left: var(--margin);
+        font-size: calc(20px + 0.390625vw);
     }
 
    

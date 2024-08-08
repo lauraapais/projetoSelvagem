@@ -329,7 +329,7 @@ aside input[type=range] {
     }
 
     h2 {
-        font-size: calc(18px + 0.390625vw);
+        font-size: calc(30px + 0.390625vw);
     }
 
     h4{
@@ -391,8 +391,8 @@ aside input[type=range] {
         margin-left: var(--margin);
     }
 
-    .PS_Logo h2{
-        line-height: calc(62px + 0.390625vw);
+    .PS_Logo h2 {
+        line-height: calc(90px + 0.390625vw)!important;
     }
 
     .play h2{

@@ -123,6 +123,7 @@ aside {
     flex-direction: column;
     justify-content: flex-end;
     position: relative;
+    pointer-events: none;
 }
 
 main {
@@ -315,6 +316,10 @@ aside input[type=range] {
     .slidecontainer h3 {
         text-align: center;
     }
+
+    .play h2{
+        padding: 2vw 3vw;
+    }
 }
 
 /* Mobile */
@@ -388,5 +393,9 @@ aside input[type=range] {
 
     .PS_Logo h2{
         line-height: calc(62px + 0.390625vw);
+    }
+
+    .play h2{
+        padding: 2vw 3vw;
     }
 }

@@ -1,4 +1,4 @@
-const playButton = document.querySelector('#playButton');
+
 let isPlaying = false;
 let sourcePoem = null;
 let sourceMusic = null;
@@ -7,20 +7,25 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNodePoem = audioContext.createGain();
 const gainNodeMusic = audioContext.createGain();
 
-playButton.addEventListener('click', async function () {
-    // Unlock the audio context on user interaction (required for mobile)
-    if (audioContext.state === 'suspended') {
-        await audioContext.resume();
-    }
+const playButton = document.querySelector('#playButton');
 
-    // Hide the play button and mark the player as playing
+playButton.addEventListener('click', handlePlay);
+playButton.addEventListener('touchstart', handlePlay, {passive: false});
+
+async function handlePlay(event) {
+    event.preventDefault(); // Impede o comportamento padrão no mobile
     playButton.style.display = "none";
     playButton.style.opacity = "0";
     isPlaying = true;
 
+    // Resume audio context after user interaction
+    if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+    }
+
     enableSliders();
     playCurrentTrackMedia();
-});
+}
 
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');

@@ -392,7 +392,7 @@ aside input[type=range] {
     }
 
     .PS_Logo h2 {
-        line-height: calc(90px + 0.390625vw)!important;
+        line-height: calc(90px + 0.390625vw);
     }
 
     .play h2{

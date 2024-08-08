@@ -1,4 +1,4 @@
-
+const playButton = document.querySelector('#playButton');
 let isPlaying = false;
 let sourcePoem = null;
 let sourceMusic = null;
@@ -7,13 +7,7 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNodePoem = audioContext.createGain();
 const gainNodeMusic = audioContext.createGain();
 
-const playButton = document.querySelector('#playButton');
-
-playButton.addEventListener('click', handlePlay);
-playButton.addEventListener('touchstart', handlePlay, {passive: false});
-
-async function handlePlay(event) {
-    event.preventDefault(); // Impede o comportamento padrão no mobile
+playButton.addEventListener('click', async function () {
     playButton.style.display = "none";
     playButton.style.opacity = "0";
     isPlaying = true;
@@ -25,7 +19,7 @@ async function handlePlay(event) {
 
     enableSliders();
     playCurrentTrackMedia();
-}
+});
 
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');

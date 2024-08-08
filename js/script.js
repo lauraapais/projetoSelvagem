@@ -8,14 +8,15 @@ const gainNodePoem = audioContext.createGain();
 const gainNodeMusic = audioContext.createGain();
 
 playButton.addEventListener('click', async function () {
-    playButton.style.display = "none";
-    playButton.style.opacity = "0";
-    isPlaying = true;
-
-    // Resume audio context after user interaction
+    // Unlock the audio context on user interaction (required for mobile)
     if (audioContext.state === 'suspended') {
         await audioContext.resume();
     }
+
+    // Hide the play button and mark the player as playing
+    playButton.style.display = "none";
+    playButton.style.opacity = "0";
+    isPlaying = true;
 
     enableSliders();
     playCurrentTrackMedia();

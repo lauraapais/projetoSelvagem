@@ -1,4 +1,5 @@
 const playButton = document.querySelector('#playButton');
+const playButtonBackground = document.querySelector('#playButtonBack');
 let isPlaying = false;
 let sourcePoem = null;
 let sourceMusic = null;
@@ -10,6 +11,8 @@ const gainNodeMusic = audioContext.createGain();
 playButton.addEventListener('click', async function () {
     playButton.style.display = "none";
     playButton.style.opacity = "0";
+    playButtonBackground.style.display = "none";
+    playButtonBackground.style.opacity = "0";
     isPlaying = true;
 
     // Resume audio context after user interaction

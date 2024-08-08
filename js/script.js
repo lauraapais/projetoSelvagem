@@ -1,4 +1,3 @@
-
 const playButton = document.querySelector('#playButton');
 let isPlaying = false;
 let sourcePoem = null;
@@ -35,39 +34,37 @@ function updateSliders(track) {
     const poem = track.querySelector('audio:nth-of-type(1)');
     const music = track.querySelector('audio:nth-of-type(2)');
 
-    // Update Video Slider (now for display only)
+    // Update Video Slider
     const videoSlider = document.getElementById('videoSlider');
-    videoSlider.value = video.style.opacity * 100 || 100;
+    videoSlider.value = (sliderValues[track.id] && sliderValues[track.id].video) || 50;
     video.style.opacity = videoSlider.value / 100;
-    videoSlider.disabled = !isPlaying;
-    videoSlider.style.opacity = isPlaying ? 1 : 0.5;
-
-    // Disable Legendas Slider (opacity controlled by mouse position)
-    const legendasSlider = document.getElementById('legendasSlider');
-    legendasSlider.disabled = true;
-    legendasSlider.style.opacity = 0.5;
 
     // Update Poem Slider
     const poemSlider = document.getElementById('poemSlider');
-    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 100;
+    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 50;
     gainNodePoem.gain.value = poemSlider.value / 100;
     poemSlider.oninput = () => {
         gainNodePoem.gain.value = poemSlider.value / 100;
         sliderValues[track.id].poem = poemSlider.value;
     };
-    poemSlider.disabled = !isPlaying;
-    poemSlider.style.opacity = isPlaying ? 1 : 0.5;
 
     // Update Music Slider
     const musicSlider = document.getElementById('musicSlider');
-    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 100;
+    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 50;
     gainNodeMusic.gain.value = musicSlider.value / 100;
     musicSlider.oninput = () => {
         gainNodeMusic.gain.value = musicSlider.value / 100;
         sliderValues[track.id].music = musicSlider.value;
     };
-    musicSlider.disabled = !isPlaying;
-    musicSlider.style.opacity = isPlaying ? 1 : 0.5;
+
+    // Update Legendas Slider
+    const legendasSlider = document.getElementById('legendasSlider');
+    legendasSlider.value = (sliderValues[track.id] && sliderValues[track.id].legendas) || 50;
+    legendas.style.opacity = legendasSlider.value / 100;
+    legendasSlider.oninput = () => {
+        legendas.style.opacity = legendasSlider.value / 100;
+        sliderValues[track.id].legendas = legendasSlider.value;
+    };
 
     if (currentTrack && isPlaying) {
         video.play();
@@ -88,6 +85,13 @@ function saveTrackTimes(track) {
         poem: poem.currentTime,
         music: music.currentTime,
         legendas: legendas.currentTime
+    };
+
+    sliderValues[track.id] = {
+        video: document.getElementById('videoSlider').value,
+        poem: document.getElementById('poemSlider').value,
+        music: document.getElementById('musicSlider').value,
+        legendas: document.getElementById('legendasSlider').value
     };
 
     video.pause();
@@ -171,7 +175,6 @@ const musicSlider = document.getElementById('musicSlider');
 
 //gainNodePoem
 const poemSlider = document.getElementById('poemSlider');
-
 
 let videoSliderInitial, legendasSliderInitial, musicSliderInitial, poemSliderInitial;
 let startX, startY, currentX, currentY, deltaX, deltaY, normalizedX, normalizedY;

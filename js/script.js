@@ -25,7 +25,7 @@ playButton.addEventListener('click', async function () {
     playCurrentTrackMedia();
 });
 
-// Função para tratar o evento de clique/toque
+// Função para iniciar o áudio e o vídeo após o clique/toque
 async function handlePlayButtonClick() {
     playButton.style.display = "none";
     playButton.style.opacity = "0";
@@ -33,21 +33,29 @@ async function handlePlayButtonClick() {
     playButtonBackground.style.opacity = "0";
     isPlaying = true;
 
-    if (audioContext.state === 'suspended') {
-        await audioContext.resume();
-    }
+    try {
+        // Resumir o AudioContext, se necessário
+        if (audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
 
-    enableSliders();
-    playCurrentTrackMedia();
+        // Habilitar sliders e começar a tocar a faixa atual
+        enableSliders();
+        playCurrentTrackMedia();
+
+        // Garantir que o vídeo comece a reproduzir
+        if (videoElement.paused) {
+            await videoElement.play();
+        }
+    } catch (error) {
+        console.error('Falha ao iniciar áudio/vídeo:', error);
+    }
 }
 
 // Adiciona suporte para diferentes eventos de interação
 playButton.addEventListener('click', handlePlayButtonClick);
 playButton.addEventListener('touchstart', handlePlayButtonClick);
 
-// Previne toques acidentais e atraso na resposta
-playButton.style.pointerEvents = "auto";
-playButtonBackground.style.pointerEvents = "none"; // Se necessário, ajuste de acordo com a necessidade
 
 
 const tracks = document.querySelectorAll('.tracks h3');

@@ -352,7 +352,7 @@ aside input[type=range] {
     main {
         padding: 0 var(--marginMobile) var(--marginMobile) var(--marginMobile);
         flex-direction: column-reverse;
-        height: calc(var(--vh, 1h)* 100  - (var(--marginMobile)*4.5) - var(--minHeaderMobile));
+        height: calc(var(--vh, 1h)* 100  - (var(--marginMobile)*9) - var(--minHeaderMobile));
         justify-content: flex-start;
 
     }

@@ -397,4 +397,8 @@ aside input[type=range] {
     .play h2{
         padding: 2vw 3vw;
     }
+
+    .slidecontainer h4{
+        display: none;
+    }
 }

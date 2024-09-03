@@ -8,34 +8,27 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNodePoem = audioContext.createGain();
 const gainNodeMusic = audioContext.createGain();
 
-function isMobile() {
-    return window.innerWidth <= 768; // Define a largura de tela para mobile
-}
-
 playButton.addEventListener('click', async function () {
-    if (!isPlaying) {
-        playButton.style.display = "none";
-        playButton.style.opacity = "0";
-        playButtonBackground.style.display = "none";
-        playButtonBackground.style.opacity = "0";
-        isPlaying = true;
+    playButton.style.display = "none";
+    playButton.style.opacity = "0";
+    playButtonBackground.style.display = "none";
+    playButtonBackground.style.opacity = "0";
+    isPlaying = true;
 
-        // Resume audio context after user interaction
-        if (audioContext.state === 'suspended') {
-            await audioContext.resume();
-        }
-
-        enableSliders();
-        playCurrentTrackMedia();
+    if (audioContext.state === 'suspended') {
+        await audioContext.resume();
     }
+
+    enableSliders();
+    playCurrentTrackMedia();
 });
 
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
 let trackTimes = {};
 let sliderValues = {};
-let isDragging = false;
-let clickTimeout;
+let increasingVolume = true;
+let isMouseDown = false;
 
 function updateSliders(track) {
     const video = track.querySelector('.video');
@@ -180,6 +173,8 @@ const poemSlider = document.getElementById('poemSlider');
 
 let videoSliderInitial, legendasSliderInitial, musicSliderInitial, poemSliderInitial;
 let startX, startY, currentX, currentY, deltaX, deltaY, normalizedX, normalizedY;
+let isDragging = false, isDoubleClick = false;
+let clickTimeout;
 
 function windowSize() {
     windowWidth = window.innerWidth;
@@ -191,47 +186,30 @@ windowSize();
 function handleStart(event) {
     event.preventDefault();
 
-    const touchPoints = event.touches ? event.touches.length : 1; // Number of fingers used or assume 1 for mouse
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
 
-    if (touchPoints === 1) { // Interaction with 1 finger or mouse
-        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-
-        if (clickTimeout) {
-            clearTimeout(clickTimeout);
+    if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+        isDoubleClick = true;
+    } else {
+        isDoubleClick = false;
+        clickTimeout = setTimeout(() => {
             clickTimeout = null;
-            // Implement double click behavior here if necessary
-        } else {
-            clickTimeout = setTimeout(() => {
-                clickTimeout = null;
-            }, 300);
-        }
-
-        isDragging = true;
-        startX = clientX;
-        startY = clientY;
-        currentX = startX;
-        currentY = startY;
-
-        videoSliderInitial = parseInt(videoSlider.value);
-        legendasSliderInitial = parseInt(legendasSlider.value);
-        musicSliderInitial = parseInt(musicSlider.value);
-        poemSliderInitial = parseInt(poemSlider.value);
-    } else if (touchPoints === 2 && isMobile()) { // Interaction with 2 fingers on mobile
-        const clientX1 = event.touches[0].clientX;
-        const clientY1 = event.touches[0].clientY;
-        const clientX2 = event.touches[1].clientX;
-        const clientY2 = event.touches[1].clientY;
-
-        startX = (clientX1 + clientX2) / 2;
-        startY = (clientY1 + clientY2) / 2;
-        currentX = startX;
-        currentY = startY;
-
-        musicSliderInitial = parseInt(musicSlider.value);
-        poemSliderInitial = parseInt(poemSlider.value);
-        isDragging = true;
+        }, 300);
     }
+
+    isDragging = true;
+    startX = clientX;
+    startY = clientY;
+    currentX = startX;
+    currentY = startY;
+
+    videoSliderInitial = parseInt(videoSlider.value);
+    legendasSliderInitial = parseInt(legendasSlider.value);
+    musicSliderInitial = parseInt(musicSlider.value);
+    poemSliderInitial = parseInt(poemSlider.value);
 }
 
 function handleMove(event) {
@@ -249,31 +227,44 @@ function handleMove(event) {
         normalizedX = Math.min(1, Math.max(-1, deltaX / windowWidth));
         normalizedY = Math.min(1, Math.max(-1, deltaY / windowHeight));
 
-        if (event.touches && event.touches.length === 2 && isMobile()) {
-            gainNodeMusic.gain.value = Math.min(1, Math.max(0, musicSliderInitial / 100 + normalizedX));
-            musicSlider.value = Math.min(100, Math.max(0, musicSliderInitial + normalizedX * 100));
-
-            gainNodePoem.gain.value = Math.min(1, Math.max(0, poemSliderInitial / 100 + normalizedY));
-            poemSlider.value = Math.min(100, Math.max(0, poemSliderInitial + normalizedY * 100));
-        } else {
+        if (!isDoubleClick) {
             video.style.opacity = Math.min(1, Math.max(0, videoSliderInitial / 100 + normalizedX));
             videoSlider.value = Math.min(100, Math.max(0, videoSliderInitial + normalizedX * 100));
 
             legendas.style.opacity = Math.min(1, Math.max(0, legendasSliderInitial / 100 + normalizedY));
             legendasSlider.value = Math.min(100, Math.max(0, legendasSliderInitial + normalizedY * 100));
+        } else {
+            gainNodeMusic.gain.value = Math.min(1, Math.max(0, musicSliderInitial / 100 + normalizedX));
+            musicSlider.value = Math.min(100, Math.max(0, musicSliderInitial + normalizedX * 100));
+
+            gainNodePoem.gain.value = Math.min(1, Math.max(0, poemSliderInitial / 100 + normalizedY));
+            poemSlider.value = Math.min(100, Math.max(0, poemSliderInitial + normalizedY * 100));
         }
     }
 }
 
 function handleEnd(event) {
     isDragging = false;
+    isDoubleClick = false;
+
+    console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
 }
 
+// Desktop Event Listeners
 document.addEventListener('mousedown', handleStart);
 document.addEventListener('mousemove', handleMove);
 document.addEventListener('mouseup', handleEnd);
 
-document.addEventListener('touchstart', handleStart, { passive: false });
+// Mobile Event Listeners (using 1 or 2 fingers)
+document.addEventListener('touchstart', function (event) {
+    if (event.touches.length === 1) {
+        handleStart(event);
+    } else if (event.touches.length === 2) {
+        isDoubleClick = true;
+        handleStart(event);
+    }
+}, { passive: false });
+
 document.addEventListener('touchmove', handleMove, { passive: false });
 document.addEventListener('touchend', handleEnd);
 

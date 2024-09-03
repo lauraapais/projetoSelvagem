@@ -14,7 +14,12 @@
         <div class="PS_Logo">
             <h2 class="hover-link">Projeto Selvagem</h2>
         </div>
-        
+        <div class="tracks">
+            <h3 class="hover-link" data-track="faixa1">1</h3>
+            <h3 class="hover-link" data-track="faixa2">2</h3>
+            <h3 class="hover-link" data-track="faixa3">3</h3>
+            <h3 class="hover-link" data-track="faixa4">4</h3>
+        </div>
     </div>
     </header>
 
@@ -91,6 +96,7 @@
 
 
     <main>
+        
         <aside class="mode">
             <div class="sliders">
             <div class="slidecontainer">
@@ -110,12 +116,7 @@
                 <input id="legendasSlider" type="range" min="0" max="100" value="100" class="slider hover-link">
             </div></div>
 
-            <div class="tracks">
-                <h3 class="hover-link" data-track="faixa1">1</h3>
-                <h3 class="hover-link" data-track="faixa2">2</h3>
-                <h3 class="hover-link" data-track="faixa3">3</h3>
-                <h3 class="hover-link" data-track="faixa4">4</h3>
-            </div>
+           
         </aside>
 
         
@@ -124,132 +125,8 @@
     <div id="cursor"></div>
 
 
-    <style>
-        .ellipse {
-          position: absolute;
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          background-color: rgba(0, 0, 0, 0.5);
-          pointer-events: none;
-          display: none;
-          z-index: 1000;
-        }
-      </style>
-      
-      <div id="ellipse1" class="ellipse"></div>
-      <div id="ellipse2" class="ellipse"></div>
-      
-      <script>
-        const ellipse1 = document.getElementById('ellipse1');
-        const ellipse2 = document.getElementById('ellipse2');
-      
-        function handleStart(event) {
-          event.preventDefault();
-      
-          const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-          const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-      
-          ellipse1.style.left = `${clientX - 25}px`;
-          ellipse1.style.top = `${clientY - 25}px`;
-          ellipse1.style.display = 'block';
-      
-          if (event.touches && event.touches.length === 2) {
-            const clientX2 = event.touches[1].clientX;
-            const clientY2 = event.touches[1].clientY;
-      
-            ellipse2.style.left = `${clientX2 - 25}px`;
-            ellipse2.style.top = `${clientY2 - 25}px`;
-            ellipse2.style.display = 'block';
-          }
-      
-          isDragging = true;
-          startX = clientX;
-          startY = clientY;
-          currentX = startX;
-          currentY = startY;
-      
-          videoSliderInitial = parseInt(videoSlider.value);
-          legendasSliderInitial = parseInt(legendasSlider.value);
-          musicSliderInitial = parseInt(musicSlider.value);
-          poemSliderInitial = parseInt(poemSlider.value);
-        }
-      
-        function handleMove(event) {
-          if (isDragging) {
-            event.preventDefault();
-      
-            const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-            const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-      
-            currentX = clientX;
-            currentY = clientY;
-      
-            ellipse1.style.left = `${clientX - 25}px`;
-            ellipse1.style.top = `${clientY - 25}px`;
-      
-            if (event.touches && event.touches.length === 2) {
-              const clientX2 = event.touches[1].clientX;
-              const clientY2 = event.touches[1].clientY;
-      
-              ellipse2.style.left = `${clientX2 - 25}px`;
-              ellipse2.style.top = `${clientY2 - 25}px`;
-            }
-      
-            // Lógica de movimento original aqui
-            deltaX = currentX - startX;
-            deltaY = currentY - startY;
-      
-            normalizedX = Math.min(1, Math.max(-1, deltaX / windowWidth));
-            normalizedY = Math.min(1, Math.max(-1, deltaY / windowHeight));
-      
-            if (!isDoubleClick) {
-              video.style.opacity = Math.min(1, Math.max(0, videoSliderInitial / 100 + normalizedX));
-              videoSlider.value = Math.min(100, Math.max(0, videoSliderInitial + normalizedX * 100));
-      
-              legendas.style.opacity = Math.min(1, Math.max(0, legendasSliderInitial / 100 + normalizedY));
-              legendasSlider.value = Math.min(100, Math.max(0, legendasSliderInitial + normalizedY * 100));
-            } else {
-              gainNodeMusic.gain.value = Math.min(1, Math.max(0, musicSliderInitial / 100 + normalizedX));
-              musicSlider.value = Math.min(100, Math.max(0, musicSliderInitial + normalizedX * 100));
-      
-              gainNodePoem.gain.value = Math.min(1, Math.max(0, poemSliderInitial / 100 + normalizedY));
-              poemSlider.value = Math.min(100, Math.max(0, poemSliderInitial + normalizedY * 100));
-            }
-          }
-        }
-      
-        function handleEnd(event) {
-          isDragging = false;
-          isDoubleClick = false;
-      
-          ellipse1.style.display = 'none';
-          ellipse2.style.display = 'none';
-      
-          console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
-        }
-      
-        // Desktop Event Listeners
-        document.addEventListener('mousedown', handleStart);
-        document.addEventListener('mousemove', handleMove);
-        document.addEventListener('mouseup', handleEnd);
-      
-        // Mobile Event Listeners (using 1 or 2 fingers)
-        document.addEventListener('touchstart', function (event) {
-          if (event.touches.length === 1) {
-            handleStart(event);
-          } else if (event.touches.length === 2) {
-            isDoubleClick = true;
-            handleStart(event);
-          }
-        }, { passive: false });
-      
-        document.addEventListener('touchmove', handleMove, { passive: false });
-        document.addEventListener('touchend', handleEnd);
-      
-        window.addEventListener("resize", windowSize);
-      </script>
-      
+   
+
     <script src="js/mobileWeight.js"></script>
     <script src="js/script.js"></script>
     <script src="js/cursor.js"></script>

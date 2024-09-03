@@ -6,7 +6,9 @@ let sourceMusic = null;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNodePoem = audioContext.createGain();
+gainNodePoem.gain.value = 1; // Inicializa com 100%
 const gainNodeMusic = audioContext.createGain();
+gainNodeMusic.gain.value = 1; // Inicializa com 100%
 
 playButton.addEventListener('click', async function () {
     playButton.style.display = "none";
@@ -37,11 +39,11 @@ function updateSliders(track) {
     const music = track.querySelector('audio:nth-of-type(2)');
 
     const videoSlider = document.getElementById('videoSlider');
-    videoSlider.value = (sliderValues[track.id] && sliderValues[track.id].video) || 50;
+    videoSlider.value = (sliderValues[track.id] && sliderValues[track.id].video) || 100; // Alterado para 100
     video.style.opacity = videoSlider.value / 100;
 
     const poemSlider = document.getElementById('poemSlider');
-    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 50;
+    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 100; // Alterado para 100
     gainNodePoem.gain.value = poemSlider.value / 100;
     poemSlider.oninput = () => {
         gainNodePoem.gain.value = poemSlider.value / 100;
@@ -49,7 +51,7 @@ function updateSliders(track) {
     };
 
     const musicSlider = document.getElementById('musicSlider');
-    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 50;
+    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 100; // Alterado para 100
     gainNodeMusic.gain.value = musicSlider.value / 100;
     musicSlider.oninput = () => {
         gainNodeMusic.gain.value = musicSlider.value / 100;
@@ -57,7 +59,7 @@ function updateSliders(track) {
     };
 
     const legendasSlider = document.getElementById('legendasSlider');
-    legendasSlider.value = (sliderValues[track.id] && sliderValues[track.id].legendas) || 50;
+    legendasSlider.value = (sliderValues[track.id] && sliderValues[track.id].legendas) || 100; // Alterado para 100
     legendas.style.opacity = legendasSlider.value / 100;
     legendasSlider.oninput = () => {
         legendas.style.opacity = legendasSlider.value / 100;
@@ -118,6 +120,14 @@ function playCurrentTrackMedia() {
     const music = currentTrack.querySelector('audio:nth-of-type(2)');
     const legendas = currentTrack.querySelector('.legendas');
 
+    // Remova fontes antigas se existirem para evitar erros
+    if (sourcePoem) {
+        sourcePoem.disconnect();
+    }
+    if (sourceMusic) {
+        sourceMusic.disconnect();
+    }
+
     sourcePoem = audioContext.createMediaElementSource(poem);
     sourcePoem.connect(gainNodePoem).connect(audioContext.destination);
 
@@ -139,6 +149,11 @@ function enableSliders() {
         slider.style.opacity = 1;
     });
 }
+
+// Inicializa os sliders com 100% ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+    updateSliders(currentTrack);
+});
 
 tracks.forEach(track => {
     track.addEventListener('click', () => {
@@ -250,22 +265,42 @@ function handleEnd(event) {
     console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
 }
 
-// Desktop Event Listeners
-document.addEventListener('mousedown', handleStart);
-document.addEventListener('mousemove', handleMove);
-document.addEventListener('mouseup', handleEnd);
-
 // Mobile Event Listeners (using 1 or 2 fingers)
 document.addEventListener('touchstart', function (event) {
     if (event.touches.length === 1) {
         handleStart(event);
     } else if (event.touches.length === 2) {
-        isDoubleClick = true;
-        handleStart(event);
+        handleTwoFingerStart(event);
     }
 }, { passive: false });
 
 document.addEventListener('touchmove', handleMove, { passive: false });
 document.addEventListener('touchend', handleEnd);
 
-window.addEventListener("resize", windowSize);
+// Função específica para iniciar a interação com dois dedos
+function handleTwoFingerStart(event) {
+    event.preventDefault();
+
+    isDoubleClick = true;
+    const touch1 = event.touches[0];
+    const touch2 = event.touches[1];
+
+    // Calcula a posição média dos dois dedos
+    startX = (touch1.clientX + touch2.clientX) / 2;
+    startY = (touch1.clientY + touch2.clientY) / 2;
+
+    isDragging = true;
+    currentX = startX;
+    currentY = startY;
+
+    videoSliderInitial = parseInt(videoSlider.value);
+    legendasSliderInitial = parseInt(legendasSlider.value);
+    musicSliderInitial = parseInt(musicSlider.value);
+    poemSliderInitial = parseInt(poemSlider.value);
+}
+
+document.addEventListener('mousedown', handleStart);
+document.addEventListener('mousemove', handleMove);
+document.addEventListener('mouseup', handleEnd);
+
+window.addEventListener('resize', windowSize);

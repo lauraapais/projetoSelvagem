@@ -8,28 +8,34 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNodePoem = audioContext.createGain();
 const gainNodeMusic = audioContext.createGain();
 
+function isMobile() {
+    return window.innerWidth <= 768; // Define a width threshold for mobile
+}
+
 playButton.addEventListener('click', async function () {
-    playButton.style.display = "none";
-    playButton.style.opacity = "0";
-    playButtonBackground.style.display = "none";
-    playButtonBackground.style.opacity = "0";
-    isPlaying = true;
+    if (!isMobile()) { // Só inicia no clique se não for mobile
+        playButton.style.display = "none";
+        playButton.style.opacity = "0";
+        playButtonBackground.style.display = "none";
+        playButtonBackground.style.opacity = "0";
+        isPlaying = true;
 
-    // Resume audio context after user interaction
-    if (audioContext.state === 'suspended') {
-        await audioContext.resume();
+        // Resume audio context after user interaction
+        if (audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
+
+        enableSliders();
+        playCurrentTrackMedia();
     }
-
-    enableSliders();
-    playCurrentTrackMedia();
 });
 
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
 let trackTimes = {};
 let sliderValues = {};
-let increasingVolume = true;  // Variable to track volume increase or decrease
-let isMouseDown = false;      // Variable to track mouse down state
+let increasingVolume = true; 
+let isMouseDown = false;
 
 function updateSliders(track) {
     const video = track.querySelector('.video');
@@ -194,38 +200,58 @@ windowSize();
 function handleStart(event) {
     event.preventDefault();
 
-    // Support for both mouse and touch
-    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+    const touchPoints = event.touches.length; // Número de dedos usados
 
-    if (clickTimeout) {
-        clearTimeout(clickTimeout);
-        clickTimeout = null;
-        isDoubleClick = true;
-    } else {
-        isDoubleClick = false;
-        clickTimeout = setTimeout(() => {
+    if (touchPoints === 1 || !isMobile()) { // Interação com 1 dedo ou desktop
+        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+        if (clickTimeout) {
+            clearTimeout(clickTimeout);
             clickTimeout = null;
-        }, 300);
+            isDoubleClick = true;
+        } else {
+            isDoubleClick = false;
+            clickTimeout = setTimeout(() => {
+                clickTimeout = null;
+            }, 300);
+        }
+
+        isDragging = true;
+        startX = clientX;
+        startY = clientY;
+        currentX = startX;
+        currentY = startY;
+
+        videoSliderInitial = parseInt(videoSlider.value);
+        legendasSliderInitial = parseInt(legendasSlider.value);
+        musicSliderInitial = parseInt(musicSlider.value);
+        poemSliderInitial = parseInt(poemSlider.value);
+    } else if (touchPoints === 2 && isMobile()) { // Interação com 2 dedos no mobile
+        // Tratamento específico para 2 dedos, se necessário
+        // Exemplo: Ajustar apenas o volume de música e poema
+        const clientX1 = event.touches[0].clientX;
+        const clientY1 = event.touches[0].clientY;
+        const clientX2 = event.touches[1].clientX;
+        const clientY2 = event.touches[1].clientY;
+
+        startX = (clientX1 + clientX2) / 2;
+        startY = (clientY1 + clientY2) / 2;
+        currentX = startX;
+        currentY = startY;
+
+        musicSliderInitial = parseInt(musicSlider.value);
+        poemSliderInitial = parseInt(poemSlider.value);
+        isDragging = true;
+        isDoubleClick = true; // Forçar ajuste de volume com 2 dedos
     }
-
-    isDragging = true;
-    startX = clientX;
-    startY = clientY;
-    currentX = startX;
-    currentY = startY;
-
-    videoSliderInitial = parseInt(videoSlider.value);
-    legendasSliderInitial = parseInt(legendasSlider.value);
-    musicSliderInitial = parseInt(musicSlider.value);
-    poemSliderInitial = parseInt(poemSlider.value);
 }
 
 function handleMove(event) {
     if (isDragging) {
         event.preventDefault();
 
-        // Support for both mouse and touch
+        // Suporte para mouse e toque
         const clientX = event.touches ? event.touches[0].clientX : event.clientX;
         const clientY = event.touches ? event.touches[0].clientY : event.clientY;
 
@@ -260,7 +286,7 @@ function handleEnd(event) {
     console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
 }
 
-// Add event listeners for both mouse and touch events
+// Adiciona listeners de eventos tanto para mouse quanto para toque
 document.addEventListener('mousedown', handleStart);
 document.addEventListener('mousemove', handleMove);
 document.addEventListener('mouseup', handleEnd);

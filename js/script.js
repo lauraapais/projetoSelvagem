@@ -9,11 +9,11 @@ const gainNodePoem = audioContext.createGain();
 const gainNodeMusic = audioContext.createGain();
 
 function isMobile() {
-    return window.innerWidth <= 768; // Define a width threshold for mobile
+    return window.innerWidth <= 768; // Define a largura de tela para mobile
 }
 
 playButton.addEventListener('click', async function () {
-    if (!isMobile()) { // Só inicia no clique se não for mobile
+    if (!isPlaying) {
         playButton.style.display = "none";
         playButton.style.opacity = "0";
         playButtonBackground.style.display = "none";
@@ -34,8 +34,8 @@ const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
 let trackTimes = {};
 let sliderValues = {};
-let increasingVolume = true; 
-let isMouseDown = false;
+let isDragging = false;
+let clickTimeout;
 
 function updateSliders(track) {
     const video = track.querySelector('.video');
@@ -43,12 +43,10 @@ function updateSliders(track) {
     const poem = track.querySelector('audio:nth-of-type(1)');
     const music = track.querySelector('audio:nth-of-type(2)');
 
-    // Update Video Slider
     const videoSlider = document.getElementById('videoSlider');
     videoSlider.value = (sliderValues[track.id] && sliderValues[track.id].video) || 50;
     video.style.opacity = videoSlider.value / 100;
 
-    // Update Poem Slider
     const poemSlider = document.getElementById('poemSlider');
     poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 50;
     gainNodePoem.gain.value = poemSlider.value / 100;
@@ -57,7 +55,6 @@ function updateSliders(track) {
         sliderValues[track.id].poem = poemSlider.value;
     };
 
-    // Update Music Slider
     const musicSlider = document.getElementById('musicSlider');
     musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 50;
     gainNodeMusic.gain.value = musicSlider.value / 100;
@@ -66,7 +63,6 @@ function updateSliders(track) {
         sliderValues[track.id].music = musicSlider.value;
     };
 
-    // Update Legendas Slider
     const legendasSlider = document.getElementById('legendasSlider');
     legendasSlider.value = (sliderValues[track.id] && sliderValues[track.id].legendas) || 50;
     legendas.style.opacity = legendasSlider.value / 100;
@@ -179,16 +175,11 @@ const videoSlider = document.getElementById('videoSlider');
 const legendas = currentTrack.querySelector('.legendas');
 const legendasSlider = document.getElementById('legendasSlider');
 
-//gainNodeMusic
 const musicSlider = document.getElementById('musicSlider');
-
-//gainNodePoem
 const poemSlider = document.getElementById('poemSlider');
 
 let videoSliderInitial, legendasSliderInitial, musicSliderInitial, poemSliderInitial;
 let startX, startY, currentX, currentY, deltaX, deltaY, normalizedX, normalizedY;
-let isDragging = false, isDoubleClick = false;
-let clickTimeout;
 
 function windowSize() {
     windowWidth = window.innerWidth;
@@ -200,18 +191,17 @@ windowSize();
 function handleStart(event) {
     event.preventDefault();
 
-    const touchPoints = event.touches.length; // Número de dedos usados
+    const touchPoints = event.touches ? event.touches.length : 1; // Number of fingers used or assume 1 for mouse
 
-    if (touchPoints === 1 || !isMobile()) { // Interação com 1 dedo ou desktop
+    if (touchPoints === 1) { // Interaction with 1 finger or mouse
         const clientX = event.touches ? event.touches[0].clientX : event.clientX;
         const clientY = event.touches ? event.touches[0].clientY : event.clientY;
 
         if (clickTimeout) {
             clearTimeout(clickTimeout);
             clickTimeout = null;
-            isDoubleClick = true;
+            // Implement double click behavior here if necessary
         } else {
-            isDoubleClick = false;
             clickTimeout = setTimeout(() => {
                 clickTimeout = null;
             }, 300);
@@ -227,9 +217,7 @@ function handleStart(event) {
         legendasSliderInitial = parseInt(legendasSlider.value);
         musicSliderInitial = parseInt(musicSlider.value);
         poemSliderInitial = parseInt(poemSlider.value);
-    } else if (touchPoints === 2 && isMobile()) { // Interação com 2 dedos no mobile
-        // Tratamento específico para 2 dedos, se necessário
-        // Exemplo: Ajustar apenas o volume de música e poema
+    } else if (touchPoints === 2 && isMobile()) { // Interaction with 2 fingers on mobile
         const clientX1 = event.touches[0].clientX;
         const clientY1 = event.touches[0].clientY;
         const clientX2 = event.touches[1].clientX;
@@ -243,7 +231,6 @@ function handleStart(event) {
         musicSliderInitial = parseInt(musicSlider.value);
         poemSliderInitial = parseInt(poemSlider.value);
         isDragging = true;
-        isDoubleClick = true; // Forçar ajuste de volume com 2 dedos
     }
 }
 
@@ -251,7 +238,6 @@ function handleMove(event) {
     if (isDragging) {
         event.preventDefault();
 
-        // Suporte para mouse e toque
         const clientX = event.touches ? event.touches[0].clientX : event.clientX;
         const clientY = event.touches ? event.touches[0].clientY : event.clientY;
 
@@ -263,30 +249,26 @@ function handleMove(event) {
         normalizedX = Math.min(1, Math.max(-1, deltaX / windowWidth));
         normalizedY = Math.min(1, Math.max(-1, deltaY / windowHeight));
 
-        if (!isDoubleClick) {
-            video.style.opacity = Math.min(1, Math.max(0, videoSliderInitial / 100 + normalizedX));
-            videoSlider.value = Math.min(100, Math.max(0, videoSliderInitial + normalizedX * 100));
-
-            legendas.style.opacity = Math.min(1, Math.max(0, legendasSliderInitial / 100 + normalizedY));
-            legendasSlider.value = Math.min(100, Math.max(0, legendasSliderInitial + normalizedY * 100));
-        } else {
+        if (event.touches && event.touches.length === 2 && isMobile()) {
             gainNodeMusic.gain.value = Math.min(1, Math.max(0, musicSliderInitial / 100 + normalizedX));
             musicSlider.value = Math.min(100, Math.max(0, musicSliderInitial + normalizedX * 100));
 
             gainNodePoem.gain.value = Math.min(1, Math.max(0, poemSliderInitial / 100 + normalizedY));
             poemSlider.value = Math.min(100, Math.max(0, poemSliderInitial + normalizedY * 100));
+        } else {
+            video.style.opacity = Math.min(1, Math.max(0, videoSliderInitial / 100 + normalizedX));
+            videoSlider.value = Math.min(100, Math.max(0, videoSliderInitial + normalizedX * 100));
+
+            legendas.style.opacity = Math.min(1, Math.max(0, legendasSliderInitial / 100 + normalizedY));
+            legendasSlider.value = Math.min(100, Math.max(0, legendasSliderInitial + normalizedY * 100));
         }
     }
 }
 
 function handleEnd(event) {
     isDragging = false;
-    isDoubleClick = false;
-
-    console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
 }
 
-// Adiciona listeners de eventos tanto para mouse quanto para toque
 document.addEventListener('mousedown', handleStart);
 document.addEventListener('mousemove', handleMove);
 document.addEventListener('mouseup', handleEnd);

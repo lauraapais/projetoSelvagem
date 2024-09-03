@@ -25,6 +25,31 @@ playButton.addEventListener('click', async function () {
     playCurrentTrackMedia();
 });
 
+// Função para tratar o evento de clique/toque
+async function handlePlayButtonClick() {
+    playButton.style.display = "none";
+    playButton.style.opacity = "0";
+    playButtonBackground.style.display = "none";
+    playButtonBackground.style.opacity = "0";
+    isPlaying = true;
+
+    if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+    }
+
+    enableSliders();
+    playCurrentTrackMedia();
+}
+
+// Adiciona suporte para diferentes eventos de interação
+playButton.addEventListener('click', handlePlayButtonClick);
+playButton.addEventListener('touchstart', handlePlayButtonClick);
+
+// Previne toques acidentais e atraso na resposta
+playButton.style.pointerEvents = "auto";
+playButtonBackground.style.pointerEvents = "none"; // Se necessário, ajuste de acordo com a necessidade
+
+
 const tracks = document.querySelectorAll('.tracks h3');
 let currentTrack = document.getElementById('faixa1');
 let trackTimes = {};

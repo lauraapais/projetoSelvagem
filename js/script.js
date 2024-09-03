@@ -6,9 +6,9 @@ let sourceMusic = null;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNodePoem = audioContext.createGain();
-gainNodePoem.gain.value = 1; // Inicializa com 100%
+gainNodePoem.gain.value = 1; 
 const gainNodeMusic = audioContext.createGain();
-gainNodeMusic.gain.value = 1; // Inicializa com 100%
+gainNodeMusic.gain.value = 1; 
 
 playButton.addEventListener('click', async function () {
     playButton.style.display = "none";
@@ -25,7 +25,6 @@ playButton.addEventListener('click', async function () {
     playCurrentTrackMedia();
 });
 
-// Função para iniciar o áudio e o vídeo após o clique/toque
 async function handlePlayButtonClick() {
     playButton.style.display = "none";
     playButton.style.opacity = "0";
@@ -33,29 +32,19 @@ async function handlePlayButtonClick() {
     playButtonBackground.style.opacity = "0";
     isPlaying = true;
 
-    try {
-        // Resumir o AudioContext, se necessário
-        if (audioContext.state === 'suspended') {
-            await audioContext.resume();
-        }
-
-        // Habilitar sliders e começar a tocar a faixa atual
-        enableSliders();
-        playCurrentTrackMedia();
-
-        // Garantir que o vídeo comece a reproduzir
-        if (videoElement.paused) {
-            await videoElement.play();
-        }
-    } catch (error) {
-        console.error('Falha ao iniciar áudio/vídeo:', error);
+    if (audioContext.state === 'suspended') {
+        await audioContext.resume();
     }
+
+    enableSliders();
+    playCurrentTrackMedia();
 }
 
-// Adiciona suporte para diferentes eventos de interação
 playButton.addEventListener('click', handlePlayButtonClick);
 playButton.addEventListener('touchstart', handlePlayButtonClick);
 
+playButton.style.pointerEvents = "auto";
+playButtonBackground.style.pointerEvents = "none"; 
 
 
 const tracks = document.querySelectorAll('.tracks h3');
@@ -72,11 +61,11 @@ function updateSliders(track) {
     const music = track.querySelector('audio:nth-of-type(2)');
 
     const videoSlider = document.getElementById('videoSlider');
-    videoSlider.value = (sliderValues[track.id] && sliderValues[track.id].video) || 100; // Alterado para 100
+    videoSlider.value = (sliderValues[track.id] && sliderValues[track.id].video) || 100; 
     video.style.opacity = videoSlider.value / 100;
 
     const poemSlider = document.getElementById('poemSlider');
-    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 100; // Alterado para 100
+    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 100; 
     gainNodePoem.gain.value = poemSlider.value / 100;
     poemSlider.oninput = () => {
         gainNodePoem.gain.value = poemSlider.value / 100;
@@ -84,7 +73,7 @@ function updateSliders(track) {
     };
 
     const musicSlider = document.getElementById('musicSlider');
-    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 100; // Alterado para 100
+    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 100; 
     gainNodeMusic.gain.value = musicSlider.value / 100;
     musicSlider.oninput = () => {
         gainNodeMusic.gain.value = musicSlider.value / 100;
@@ -92,7 +81,7 @@ function updateSliders(track) {
     };
 
     const legendasSlider = document.getElementById('legendasSlider');
-    legendasSlider.value = (sliderValues[track.id] && sliderValues[track.id].legendas) || 100; // Alterado para 100
+    legendasSlider.value = (sliderValues[track.id] && sliderValues[track.id].legendas) || 100; 
     legendas.style.opacity = legendasSlider.value / 100;
     legendasSlider.oninput = () => {
         legendas.style.opacity = legendasSlider.value / 100;
@@ -153,7 +142,6 @@ function playCurrentTrackMedia() {
     const music = currentTrack.querySelector('audio:nth-of-type(2)');
     const legendas = currentTrack.querySelector('.legendas');
 
-    // Remova fontes antigas se existirem para evitar erros
     if (sourcePoem) {
         sourcePoem.disconnect();
     }
@@ -298,7 +286,6 @@ function handleEnd(event) {
     console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
 }
 
-// Mobile Event Listeners (using 1 or 2 fingers)
 document.addEventListener('touchstart', function (event) {
     if (event.touches.length === 1) {
         handleStart(event);
@@ -310,7 +297,6 @@ document.addEventListener('touchstart', function (event) {
 document.addEventListener('touchmove', handleMove, { passive: false });
 document.addEventListener('touchend', handleEnd);
 
-// Função específica para iniciar a interação com dois dedos
 function handleTwoFingerStart(event) {
     event.preventDefault();
 
@@ -318,7 +304,6 @@ function handleTwoFingerStart(event) {
     const touch1 = event.touches[0];
     const touch2 = event.touches[1];
 
-    // Calcula a posição média dos dois dedos
     startX = (touch1.clientX + touch2.clientX) / 2;
     startY = (touch1.clientY + touch2.clientY) / 2;
 

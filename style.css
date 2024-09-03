@@ -72,7 +72,7 @@ h3 {
 }
 
 h2 {
-    font-size: calc(18px + 0.390625vw);
+    font-size: calc(16px + 0.390625vw);
 }
 
 header {
@@ -134,7 +134,6 @@ main {
     justify-content: space-between;
     height: calc(var(--vh, 1h)* 100  - (var(--margin)*1.5) - var(--minHeader));
     padding: 0 var(--margin) calc(var(--margin)/2) var(--margin);
-    justify-content: center;
 }
 
 .mode h3,
@@ -265,7 +264,7 @@ aside input[type=range] {
     text-align: center;
     cursor: pointer;
     opacity: 100% !important;
-    padding: 0.7vw 1.7vw;
+    padding: 0.5vw 1.5vw;
 }
 
 .slidecontainer h3 {
@@ -331,7 +330,7 @@ aside input[type=range] {
     
 
     .play h2{
-        padding: 2vw 3vw;
+        padding: 2vw 4vw;
     }
 }
 
@@ -342,7 +341,7 @@ aside input[type=range] {
     }
 
     h2 {
-        font-size: calc(20px + 0.390625vw);
+        font-size: calc(17px + 0.390625vw);
     }
 
     h4{
@@ -352,7 +351,7 @@ aside input[type=range] {
     main {
         padding: 0 var(--marginMobile) var(--marginMobile) var(--marginMobile);
         flex-direction: column-reverse;
-        height: calc(var(--vh, 1h)* 100  - (var(--marginMobile)*9) - var(--minHeaderMobile));
+        height: calc(var(--vh, 1h)* 100  - (var(--marginMobile)*5) - var(--minHeaderMobile));
         justify-content: flex-start;
 
     }
@@ -362,7 +361,7 @@ aside input[type=range] {
         padding: var(--marginMobile) var(--marginMobile) 0 var(--marginMobile);
     }
 
-    .headerContent{
+    .headerContent{ 
         width: calc(100vw - var(--marginMobile)*2);
     }
 
@@ -409,12 +408,12 @@ aside input[type=range] {
 
     .tracks h3 {
         margin-left: var(--margin);
-        font-size: calc(20px + 0.390625vw);
+        font-size: calc(16px + 0.390625vw);
     }
 
    
     .play h2{
-        padding: 2vw 3vw;
+        padding: 2vw 4vw;
     }
 
     .slidecontainer h4{

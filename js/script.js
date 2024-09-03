@@ -6,7 +6,7 @@ let sourceMusic = null;
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const gainNodePoem = audioContext.createGain();
-gainNodePoem.gain.value = 1; 
+gainNodePoem.gain.value = 1; // Inicializa com 100%
 const gainNodeMusic = audioContext.createGain();
 gainNodeMusic.gain.value = 1; 
 

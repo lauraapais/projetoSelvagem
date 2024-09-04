@@ -54,6 +54,7 @@ let sliderValues = {};
 let increasingVolume = true;
 let isMouseDown = false;
 
+
 function updateSliders(track) {
     const video = track.querySelector('.video');
     const legendas = track.querySelector('.legendas');
@@ -171,9 +172,17 @@ function enableSliders() {
     });
 }
 
-// Inicializa os sliders com 100% ao carregar a página
+function disableSliders() {
+    const sliders = document.querySelectorAll('#videoSlider, #legendasSlider, #poemSlider, #musicSlider');
+    sliders.forEach(slider => {
+        slider.disabled = true;
+        slider.style.pointerEvents = "none"; ;
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     updateSliders(currentTrack);
+    disableSliders();
 });
 
 tracks.forEach(track => {

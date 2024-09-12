@@ -1,333 +1,168 @@
-const playButton = document.querySelector('#playButton');
-const playButtonBackground = document.querySelector('#playButtonBack');
-let isPlaying = false;
-let sourcePoem = null;
-let sourceMusic = null;
+window.onload = function() {
+    const startButton = document.getElementById('startButton');
+    const videos = document.querySelectorAll('.video');  
+    const legendas = document.querySelectorAll('.legendas');  
+    const poesiaAudio = document.querySelector('.poesia');  
+    const jazzAudio = document.querySelector('.jazz'); 
+    const audios = document.querySelectorAll('audio');
+    const divRight = document.querySelector('.divRight');
+    const divBottom = document.querySelector('.divBottom');
+    const divLeft = document.querySelector('.divLeft');
+    const divTop = document.querySelector('.divTop');
+    const margin = 50; 
+    let isActive = false; 
+    let currentTrack = null; // Faixa atual sendo tocada
+    let previousTrack = null; // Faixa anterior
 
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const gainNodePoem = audioContext.createGain();
-gainNodePoem.gain.value = 1; // Inicializa com 100%
-const gainNodeMusic = audioContext.createGain();
-gainNodeMusic.gain.value = 1; 
-
-playButton.addEventListener('click', async function () {
-    playButton.style.display = "none";
-    playButton.style.opacity = "0";
-    playButtonBackground.style.display = "none";
-    playButtonBackground.style.opacity = "0";
-    isPlaying = true;
-
-    if (audioContext.state === 'suspended') {
-        await audioContext.resume();
-    }
-
-    enableSliders();
-    playCurrentTrackMedia();
-});
-
-async function handlePlayButtonClick() {
-    playButton.style.display = "none";
-    playButton.style.opacity = "0";
-    playButtonBackground.style.display = "none";
-    playButtonBackground.style.opacity = "0";
-    isPlaying = true;
-
-    if (audioContext.state === 'suspended') {
-        await audioContext.resume();
-    }
-
-    enableSliders();
-    playCurrentTrackMedia();
-}
-
-playButton.addEventListener('click', handlePlayButtonClick);
-playButton.addEventListener('touchstart', handlePlayButtonClick);
-
-playButton.style.pointerEvents = "auto";
-playButtonBackground.style.pointerEvents = "none"; 
-
-
-const tracks = document.querySelectorAll('.tracks h3');
-let currentTrack = document.getElementById('faixa1');
-let trackTimes = {};
-let sliderValues = {};
-let increasingVolume = true;
-let isMouseDown = false;
-
-
-function updateSliders(track) {
-    const video = track.querySelector('.video');
-    const legendas = track.querySelector('.legendas');
-    const poem = track.querySelector('audio:nth-of-type(1)');
-    const music = track.querySelector('audio:nth-of-type(2)');
-
-    const videoSlider = document.getElementById('videoSlider');
-    videoSlider.value = (sliderValues[track.id] && sliderValues[track.id].video) || 100; 
-    video.style.opacity = videoSlider.value / 100;
-
-    const poemSlider = document.getElementById('poemSlider');
-    poemSlider.value = (sliderValues[track.id] && sliderValues[track.id].poem) || 100; 
-    gainNodePoem.gain.value = poemSlider.value / 100;
-    poemSlider.oninput = () => {
-        gainNodePoem.gain.value = poemSlider.value / 100;
-        sliderValues[track.id].poem = poemSlider.value;
-    };
-
-    const musicSlider = document.getElementById('musicSlider');
-    musicSlider.value = (sliderValues[track.id] && sliderValues[track.id].music) || 100; 
-    gainNodeMusic.gain.value = musicSlider.value / 100;
-    musicSlider.oninput = () => {
-        gainNodeMusic.gain.value = musicSlider.value / 100;
-        sliderValues[track.id].music = musicSlider.value;
-    };
-
-    const legendasSlider = document.getElementById('legendasSlider');
-    legendasSlider.value = (sliderValues[track.id] && sliderValues[track.id].legendas) || 100; 
-    legendas.style.opacity = legendasSlider.value / 100;
-    legendasSlider.oninput = () => {
-        legendas.style.opacity = legendasSlider.value / 100;
-        sliderValues[track.id].legendas = legendasSlider.value;
-    };
-
-    if (currentTrack && isPlaying) {
-        video.play();
-        poem.play();
-        music.play();
-        legendas.play();
-    }
-}
-
-function saveTrackTimes(track) {
-    const video = track.querySelector('.video');
-    const poem = track.querySelector('audio:nth-of-type(1)');
-    const music = track.querySelector('audio:nth-of-type(2)');
-    const legendas = track.querySelector('.legendas');
-
-    trackTimes[track.id] = {
-        video: video.currentTime,
-        poem: poem.currentTime,
-        music: music.currentTime,
-        legendas: legendas.currentTime
-    };
-
-    sliderValues[track.id] = {
-        video: document.getElementById('videoSlider').value,
-        poem: document.getElementById('poemSlider').value,
-        music: document.getElementById('musicSlider').value,
-        legendas: document.getElementById('legendasSlider').value
-    };
-
-    video.pause();
-    poem.pause();
-    music.pause();
-    legendas.pause();
-}
-
-function restoreTrackTimes(track) {
-    const video = track.querySelector('.video');
-    const poem = track.querySelector('audio:nth-of-type(1)');
-    const music = track.querySelector('audio:nth-of-type(2)');
-    const legendas = track.querySelector('.legendas');
-
-    if (trackTimes[track.id]) {
-        video.currentTime = trackTimes[track.id].video;
-        poem.currentTime = trackTimes[track.id].poem;
-        music.currentTime = trackTimes[track.id].music;
-        legendas.currentTime = trackTimes[track.id].legendas;
-    }
-}
-
-function playCurrentTrackMedia() {
-    const video = currentTrack.querySelector('.video');
-    const poem = currentTrack.querySelector('audio:nth-of-type(1)');
-    const music = currentTrack.querySelector('audio:nth-of-type(2)');
-    const legendas = currentTrack.querySelector('.legendas');
-
-    if (sourcePoem) {
-        sourcePoem.disconnect();
-    }
-    if (sourceMusic) {
-        sourceMusic.disconnect();
-    }
-
-    sourcePoem = audioContext.createMediaElementSource(poem);
-    sourcePoem.connect(gainNodePoem).connect(audioContext.destination);
-
-    sourceMusic = audioContext.createMediaElementSource(music);
-    sourceMusic.connect(gainNodeMusic).connect(audioContext.destination);
-
-    restoreTrackTimes(currentTrack);
-
-    video.play();
-    poem.play();
-    music.play();
-    legendas.play();
-}
-
-function enableSliders() {
-    const sliders = document.querySelectorAll('#videoSlider, #legendasSlider, #poemSlider, #musicSlider');
-    sliders.forEach(slider => {
-        slider.disabled = false;
-        slider.style.opacity = 1;
-    });
-}
-
-function disableSliders() {
-    const sliders = document.querySelectorAll('#videoSlider, #legendasSlider, #poemSlider, #musicSlider');
-    sliders.forEach(slider => {
-        slider.disabled = true;
-        slider.style.pointerEvents = "none"; ;
-    });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    updateSliders(currentTrack);
-    disableSliders();
-});
-
-tracks.forEach(track => {
-    track.addEventListener('click', () => {
-        const trackId = track.getAttribute('data-track');
-        const newTrack = document.getElementById(trackId);
-
-        if (currentTrack !== newTrack) {
-            saveTrackTimes(currentTrack);
-
-            currentTrack.style.display = 'none';
-            newTrack.style.display = 'block';
-            currentTrack = newTrack;
-            updateSliders(currentTrack);
-
-            if (isPlaying) {
-                playCurrentTrackMedia();
-            }
+    function hideAllTracks() {
+        for (let i = 1; i <= 8; i++) {
+            const track = document.querySelector(`.track${i}`);
+            if (track) track.style.display = 'none';
         }
-    });
-});
-
-let windowWidth, windowHeight;
-
-const video = currentTrack.querySelector('.video');
-const videoSlider = document.getElementById('videoSlider');
-
-const legendas = currentTrack.querySelector('.legendas');
-const legendasSlider = document.getElementById('legendasSlider');
-
-const musicSlider = document.getElementById('musicSlider');
-const poemSlider = document.getElementById('poemSlider');
-
-let videoSliderInitial, legendasSliderInitial, musicSliderInitial, poemSliderInitial;
-let startX, startY, currentX, currentY, deltaX, deltaY, normalizedX, normalizedY;
-let isDragging = false, isDoubleClick = false;
-let clickTimeout;
-
-function windowSize() {
-    windowWidth = window.innerWidth;
-    windowHeight = window.innerHeight;
-}
-
-windowSize();
-
-function handleStart(event) {
-    event.preventDefault();
-
-    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-    const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-
-    if (clickTimeout) {
-        clearTimeout(clickTimeout);
-        clickTimeout = null;
-        isDoubleClick = true;
-    } else {
-        isDoubleClick = false;
-        clickTimeout = setTimeout(() => {
-            clickTimeout = null;
-        }, 300);
     }
 
-    isDragging = true;
-    startX = clientX;
-    startY = clientY;
-    currentX = startX;
-    currentY = startY;
+    function showTrack(trackNumber) {
+        hideAllTracks();
+        const selectedTrack = document.querySelector(`.track${trackNumber}`);
+        if (selectedTrack) selectedTrack.style.display = 'block';
+    }
 
-    videoSliderInitial = parseInt(videoSlider.value);
-    legendasSliderInitial = parseInt(legendasSlider.value);
-    musicSliderInitial = parseInt(musicSlider.value);
-    poemSliderInitial = parseInt(poemSlider.value);
-}
+    const faixas = document.querySelectorAll('.hover-link');
+    faixas.forEach(faixa => {
+        faixa.addEventListener('click', function() {
+            const selectedTrackNumber = this.getAttribute('data-track').replace('faixa', '');
+            changeTrack(selectedTrackNumber);
+        });
+    });
 
-function handleMove(event) {
-    if (isDragging) {
-        event.preventDefault();
+    function changeTrack(trackNumber) {
+        // Se houver uma faixa anterior, pausá-la
+        if (previousTrack) {
+            const previousTrackElement = document.querySelector(`.track${previousTrack}`);
+            const previousAudio = previousTrackElement.querySelector('audio');
+            const previousVideo = previousTrackElement.querySelector('video');
 
-        const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-        const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+            if (previousAudio) previousAudio.pause(); // Pausar áudio da faixa anterior
+            if (previousVideo) previousVideo.pause(); // Pausar vídeo da faixa anterior
+        }
 
-        currentX = clientX;
-        currentY = clientY;
-        deltaX = currentX - startX;
-        deltaY = currentY - startY;
+        // Atualiza a faixa atual
+        currentTrack = trackNumber;
+        showTrack(currentTrack);
 
-        normalizedX = Math.min(1, Math.max(-1, deltaX / windowWidth));
-        normalizedY = Math.min(1, Math.max(-1, deltaY / windowHeight));
+        // Reproduz a faixa atual a partir do ponto onde foi pausada
+        const currentTrackElement = document.querySelector(`.track${currentTrack}`);
+        const currentAudio = currentTrackElement.querySelector('audio');
+        const currentVideo = currentTrackElement.querySelector('video');
 
-        if (!isDoubleClick) {
-            video.style.opacity = Math.min(1, Math.max(0, videoSliderInitial / 100 + normalizedX));
-            videoSlider.value = Math.min(100, Math.max(0, videoSliderInitial + normalizedX * 100));
+        if (currentAudio) currentAudio.play(); // Inicia o áudio da nova faixa
+        if (currentVideo) currentVideo.play(); // Inicia o vídeo da nova faixa
 
-            legendas.style.opacity = Math.min(1, Math.max(0, legendasSliderInitial / 100 + normalizedY));
-            legendasSlider.value = Math.min(100, Math.max(0, legendasSliderInitial + normalizedY * 100));
+        // Atualiza a faixa anterior para ser a faixa atual
+        previousTrack = currentTrack;
+    }
+
+    function updateVideoOpacity(event) {
+        if (!isActive) return;
+
+        const rect = divRight.getBoundingClientRect();
+        const mouseY = event.clientY - rect.top;
+        const divHeight = rect.height;
+        const adjustedHeight = divHeight - 2 * margin;
+
+        if (mouseY < margin) {
+            videos.forEach(video => video.style.opacity = '0');
+        } else if (mouseY > divHeight - margin) {
+            videos.forEach(video => video.style.opacity = '1');
         } else {
-            gainNodeMusic.gain.value = Math.min(1, Math.max(0, musicSliderInitial / 100 + normalizedX));
-            musicSlider.value = Math.min(100, Math.max(0, musicSliderInitial + normalizedX * 100));
-
-            gainNodePoem.gain.value = Math.min(1, Math.max(0, poemSliderInitial / 100 + normalizedY));
-            poemSlider.value = Math.min(100, Math.max(0, poemSliderInitial + normalizedY * 100));
+            const adjustedMouseY = mouseY - margin;
+            const opacity = Math.min(1, Math.max(0, adjustedMouseY / adjustedHeight));
+            videos.forEach(video => video.style.opacity = opacity.toString());
         }
     }
-}
 
-function handleEnd(event) {
-    isDragging = false;
-    isDoubleClick = false;
+    function updateLegendasOpacity(event) {
+        if (!isActive) return;
 
-    console.log(gainNodePoem.gain.value, gainNodeMusic.gain.value);
-}
+        const rect = divBottom.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;  
+        const divWidth = rect.width;
+        const adjustedWidth = divWidth - 2 * margin;
 
-document.addEventListener('touchstart', function (event) {
-    if (event.touches.length === 1) {
-        handleStart(event);
-    } else if (event.touches.length === 2) {
-        handleTwoFingerStart(event);
+        if (mouseX < margin) {
+            legendas.forEach(legenda => legenda.style.opacity = '0');
+        } else if (mouseX > divWidth - margin) {
+            legendas.forEach(legenda => legenda.style.opacity = '1');
+        } else {
+            const adjustedMouseX = mouseX - margin;
+            const opacity = Math.min(1, Math.max(0, adjustedMouseX / adjustedWidth));
+            legendas.forEach(legenda => legenda.style.opacity = opacity.toString());
+        }
     }
-}, { passive: false });
 
-document.addEventListener('touchmove', handleMove, { passive: false });
-document.addEventListener('touchend', handleEnd);
+    function updatePoesiaVolume(event) {
+        if (!isActive) return;
 
-function handleTwoFingerStart(event) {
-    event.preventDefault();
+        const rect = divLeft.getBoundingClientRect();
+        const mouseY = event.clientY - rect.top;  
+        const divHeight = rect.height;
+        const adjustedHeight = divHeight - 2 * margin;
 
-    isDoubleClick = true;
-    const touch1 = event.touches[0];
-    const touch2 = event.touches[1];
+        if (mouseY < margin) {
+            poesiaAudio.volume = 0;  
+        } else if (mouseY > divHeight - margin) {
+            poesiaAudio.volume = 1; 
+        } else {
+            const adjustedMouseY = mouseY - margin;
+            const volume = Math.min(1, Math.max(0, adjustedMouseY / adjustedHeight));
+            poesiaAudio.volume = volume;  
+        }
+    }
 
-    startX = (touch1.clientX + touch2.clientX) / 2;
-    startY = (touch1.clientY + touch2.clientY) / 2;
+    function updateJazzVolume(event) {
+        if (!isActive) return;
 
-    isDragging = true;
-    currentX = startX;
-    currentY = startY;
+        const rect = divTop.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left; 
+        const divWidth = rect.width;
+        const adjustedWidth = divWidth - 2 * margin;
 
-    videoSliderInitial = parseInt(videoSlider.value);
-    legendasSliderInitial = parseInt(legendasSlider.value);
-    musicSliderInitial = parseInt(musicSlider.value);
-    poemSliderInitial = parseInt(poemSlider.value);
-}
+        if (mouseX < margin) {
+            jazzAudio.volume = 0;  
+        } else if (mouseX > divWidth - margin) {
+            jazzAudio.volume = 1; 
+        } else {
+            const adjustedMouseX = mouseX - margin;
+            const volume = Math.min(1, Math.max(0, adjustedMouseX / adjustedWidth));
+            jazzAudio.volume = volume;
+        }
+    }
 
-document.addEventListener('mousedown', handleStart);
-document.addEventListener('mousemove', handleMove);
-document.addEventListener('mouseup', handleEnd);
+    startButton.addEventListener('click', function() {
+        if (currentTrack === null) {
+            currentTrack = 1;
+        }
+        showTrack(currentTrack);
 
-window.addEventListener('resize', windowSize);
+        videos.forEach(video => {
+            video.style.opacity = '1';
+            video.play();
+        });
+
+        legendas.forEach(legenda => {
+            legenda.style.opacity = '1';
+            legenda.play();
+        });
+
+        audios.forEach(audio => audio.play());
+
+        startButton.style.opacity = '0';
+
+        isActive = true;
+    });
+
+    divRight.addEventListener('mousemove', updateVideoOpacity);
+    divBottom.addEventListener('mousemove', updateLegendasOpacity);
+    divLeft.addEventListener('mousemove', updatePoesiaVolume);
+    divTop.addEventListener('mousemove', updateJazzVolume);
+};

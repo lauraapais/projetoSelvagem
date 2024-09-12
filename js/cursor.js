@@ -19,30 +19,3 @@ hoverLinks.forEach((link) => {
         cursor.classList.remove("active");
     });
 });
-
-let locoScroll;
-
-function initLocomotiveScroll() {
-    if (locoScroll) {
-        locoScroll.destroy(); // Destroy the existing instance
-    }
-
-    locoScroll = new LocomotiveScroll({
-        el: document.querySelector('[data-scroll-container]'),
-        smooth: true,
-        mobile: {
-            smooth: true,
-            breakpoint: 0
-        },
-        tablet: {
-            smooth: true,
-            breakpoint: 0
-        }
-    });
-    
-    new ResizeObserver(() => locoScroll.update()).observe(
-        document.querySelector("[data-scroll-container]")
-    );
-}
-
-window.addEventListener("load", initLocomotiveScroll);

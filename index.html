@@ -8,119 +8,181 @@
 </head>
 
 <body>
-    <header>
-        <div class="headerBackground"></div>
-        <div class="headerContent">
-        <div class="PS_Logo">
-            <h2 class="hover-link">Projeto Selvagem</h2>
+    <main>
+        <div class="divTop slider">
+            <p>Jazz</p>
         </div>
-        <div class="tracks">
-            <h3 class="hover-link" data-track="faixa1">1</h3>
-            <h3 class="hover-link" data-track="faixa2">2</h3>
-            <h3 class="hover-link" data-track="faixa3">3</h3>
-            <h3 class="hover-link" data-track="faixa4">4</h3>
+        <div class="divRight slider">
+            <p>Video</p>
         </div>
-    </div>
-    </header>
+        <div class="divBottom slider">
+            <p>Legendas</p>
+        </div>
+        <div class="divLeft slider">
+            <p>Poesia</p>
+        </div>
 
-    <div class="interactionBase">
-        <!--Faixa 1-->
-        <div class="faixa" id="faixa1">
-            <div id="playButtonBack"  class="play">
-                <div id="playButton" class="hover-link">
-                    <h2>Começar</h2>
-                </div>
+        <div class="track">
+            <div class="faixas">
+                <p data-track="faixa1">1</p>
+                <p data-track="faixa2">2</p>
+                <p data-track="faixa3">3</p>
+                <p data-track="faixa4">4</p>
+                <p data-track="faixa5">5</p>
+                <p data-track="faixa6">6</p>
+                <p data-track="faixa7">7</p>
+                <p data-track="faixa8">8</p>
             </div>
-            <video class="video" muted loop>
-                <source src="data/faixas/5/5.mp4" type="video/mp4">
-            </video>
-            <video class="legendas" muted loop>
-                <source src="data/faixas/1/legendas.mp4" type="video/mp4">
-            </video>
-            <audio loop>
-                <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
-            </audio>
-            <audio loop>
-                <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
-            </audio>
-        </div>
 
-        <!--Faixa 2-->
-        <div class="faixa" id="faixa2" style="display:none;">
-            <video class="video" muted loop>
-                <source src="data/faixas/2/2.mp4" type="video/mp4">
-            </video>
-            <video class="legendas" muted loop>
-                <source src="data/faixas/1/legendas.mp4" type="video/mp4">
-            </video>
-            <audio loop>
-                <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
-            </audio>
-            <audio loop>
-                <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
-            </audio>
-        </div>
+            <svg id="startButton" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 24">
+                <defs>
+                </defs>
+                <g>
+                    <polygon class="cls-1" points="1 1 1 23 17 12 1 1" />
+                </g>
+            </svg>
 
-        <!--Faixa 3-->
-        <div class="faixa" id="faixa3" style="display:none;">
-            <video class="video" muted loop>
-                <source src="data/faixas/3/3.mp4" type="video/mp4">
-            </video>
-            <video class="legendas" muted loop>
-                <source src="data/faixas/1/legendas.mp4" type="video/mp4">
-            </video>
-            <audio loop>
-                <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
-            </audio>
-            <audio loop>
-                <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
-            </audio>
-        </div>
-
-        <!--Faixa 4-->
-        <div class="faixa" id="faixa4" style="display:none;">
-            <video class="video" muted loop>
-                <source src="data/faixas/4/4.mp4" type="video/mp4">
-            </video>
-            <video class="legendas" muted loop>
-                <source src="data/faixas/1/legendas.mp4" type="video/mp4">
-            </video>
-            <audio loop>
-                <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
-            </audio>
-            <audio loop>
-                <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
-            </audio>
-        </div>
-    </div>
-
-
-    <main>  
-        <aside class="mode">
-            <div class="sliders">
-            <div class="slidecontainer">
-                <h3>Poesia</h3>
-                <input id="poemSlider" type="range" min="0" max="100" value="100" class="slider hover-link">
+            <div class="type">
+                <span class="title">Projeto<br>Selvagem</span>
             </div>
-            <div class="slidecontainer">
-                <h3>Jazz</h3>
-                <input id="musicSlider" type="range" min="0" max="100" value="100" class="slider hover-link">
+
+
+            <!----------------------------------------Track 1---------------------------------------->
+            <div class="track1">
+                <video class="video" muted loop>
+                    <source src="data/faixas/1/1_2.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
             </div>
-            <div class="slidecontainer">
-                <h3>Vídeo</h3>
-                <input id="videoSlider" type="range" min="0" max="100" value="100" class="slider hover-link">
+
+            <!----------------------------------------Track 2---------------------------------------->
+            <div class="track2">
+                <video class="video" muted loop>
+                    <source src="data/faixas/2/2.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
             </div>
-            <div class="slidecontainer">
-                <h3>Legendas</h3>
-                <input id="legendasSlider" type="range" min="0" max="100" value="100" class="slider hover-link">
-            </div></div>
-        </aside>   
+
+            <!----------------------------------------Track 3---------------------------------------->
+            <div class="track3">
+                <video class="video" muted loop>
+                    <source src="data/faixas/3/3.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <!----------------------------------------Track 4---------------------------------------->
+            <div class="track4">
+                <video class="video" muted loop>
+                    <source src="data/faixas/4/4.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <!----------------------------------------Track 5---------------------------------------->
+            <div class="track5">
+                <video class="video" muted loop>
+                    <source src="data/faixas/5/5.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <!----------------------------------------Track 6---------------------------------------->
+            <div class="track6">
+                <video class="video" muted loop>
+                    <source src="data/faixas/6/6.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <!----------------------------------------Track 7---------------------------------------->
+            <div class="track7">
+                <video class="video" muted loop>
+                    <source src="data/faixas/6/6.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <!----------------------------------------Track 8---------------------------------------->
+            <div class="track8">
+                <video class="video" muted loop>
+                    <source src="data/faixas/6/6.mp4" type="video/mp4">
+                </video>
+                <video class="legendas" muted loop>
+                    <source src="data/faixas/1/legendas.mp4" type="video/mp4">
+                </video>
+                <audio class="poesia" loop>
+                    <source src="data/faixas/1/audio1.mp3" type="audio/mpeg">
+                </audio>
+                <audio class="jazz" loop>
+                    <source src="data/faixas/1/BradMehldau_AfterBach.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+        </div>
     </main>
+
     <div id="cursor"></div>
 
-    <script src="js/mobileWeight.js"></script>
-    <script src="js/script.js"></script>
     <script src="js/cursor.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/mobileWeight.js"></script>
 </body>
 
 </html>

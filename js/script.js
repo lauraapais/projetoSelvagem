@@ -1,4 +1,3 @@
-window.onload = function() {
     const startButton = document.getElementById('startButton');
     const videos = document.querySelectorAll('.video');  
     const legendas = document.querySelectorAll('.legendas');  
@@ -161,7 +160,6 @@ window.onload = function() {
     divBottom.addEventListener('mousemove', updateLegendasOpacity);
     divLeft.addEventListener('mousemove', updatePoesiaVolume);
     divTop.addEventListener('mousemove', updateJazzVolume);
-};
 
 
 

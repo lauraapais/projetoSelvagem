@@ -11,8 +11,8 @@ window.onload = function() {
     const divTop = document.querySelector('.divTop');
     const margin = 50; 
     let isActive = false; 
-    let currentTrack = null; // Faixa atual sendo tocada
-    let previousTrack = null; // Faixa anterior
+    let currentTrack = null;
+    let previousTrack = null; 
 
     function hideAllTracks() {
         for (let i = 1; i <= 8; i++) {
@@ -36,29 +36,25 @@ window.onload = function() {
     });
 
     function changeTrack(trackNumber) {
-        // Se houver uma faixa anterior, pausá-la
         if (previousTrack) {
             const previousTrackElement = document.querySelector(`.track${previousTrack}`);
             const previousAudio = previousTrackElement.querySelector('audio');
             const previousVideo = previousTrackElement.querySelector('video');
 
-            if (previousAudio) previousAudio.pause(); // Pausar áudio da faixa anterior
-            if (previousVideo) previousVideo.pause(); // Pausar vídeo da faixa anterior
+            if (previousAudio) previousAudio.pause(); 
+            if (previousVideo) previousVideo.pause(); 
         }
 
-        // Atualiza a faixa atual
         currentTrack = trackNumber;
         showTrack(currentTrack);
 
-        // Reproduz a faixa atual a partir do ponto onde foi pausada
         const currentTrackElement = document.querySelector(`.track${currentTrack}`);
         const currentAudio = currentTrackElement.querySelector('audio');
         const currentVideo = currentTrackElement.querySelector('video');
 
-        if (currentAudio) currentAudio.play(); // Inicia o áudio da nova faixa
-        if (currentVideo) currentVideo.play(); // Inicia o vídeo da nova faixa
+        if (currentAudio) currentAudio.play(); 
+        if (currentVideo) currentVideo.play(); 
 
-        // Atualiza a faixa anterior para ser a faixa atual
         previousTrack = currentTrack;
     }
 
@@ -166,3 +162,8 @@ window.onload = function() {
     divLeft.addEventListener('mousemove', updatePoesiaVolume);
     divTop.addEventListener('mousemove', updateJazzVolume);
 };
+
+
+
+
+

@@ -1,6 +1,7 @@
 :root {
     --bg-color: #E9E7E1;
     --text: #252525;
+    --sliders: #D8D5CE;
     --minHeader: 10vh;
     --minHeaderMobile: 5vh;
     --margin: 3vw;
@@ -58,6 +59,10 @@ p {
 
 .slider{
     color: var(--text);
+    /*
+    background-color: var(--sliders);
+    mix-blend-mode: multiply;
+    */
 }
 .divTop {
     width: 100vw;
@@ -183,7 +188,7 @@ p {
     position: absolute;
     top: 50%;
     right: 50%;
-    z-index: 500;
+    z-index: 200;
 }
 
 .legendas{

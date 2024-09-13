@@ -50,20 +50,18 @@ body {
     font-family: "HelveticaNeue";
     padding: 0;
     margin: 0;
-    color: var(--bg-color);
 }
 
 p {
     font-weight: 800;
 }
 
-.slider{
-    color: var(--text);
-    /*
-    background-color: var(--sliders);
-    mix-blend-mode: multiply;
-    */
+main{
+    position: relative;
 }
+
+
+
 .divTop {
     width: 100vw;
     height: 50px;
@@ -71,22 +69,21 @@ p {
     top: 0;
     justify-content: flex-end;
     border-bottom: var(--text) solid 1px;
+    justify-content: center;
 }
 
-.divTop p {
-    padding-right: 70px;
-}
 
 .divRight {
     height: 100vh;
     width: 50px;
     position: absolute;
     right: 0;
-
+    justify-content: center;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     border-left: var(--text) solid 1px;
+    align-items: center;
 }
 
 .divRight p {
@@ -94,7 +91,7 @@ p {
     text-align: center;
     padding: 0;
     margin: 0;
-    padding-left: calc(70px + 10ch);
+
 }
 
 .divBottom {
@@ -103,11 +100,10 @@ p {
     position: absolute;
     bottom: 0;
     border-top: var(--text) solid 1px;
+    justify-content: center;
 }
 
-.divBottom p {
-    padding-left: 70px;
-}
+
 
 .divLeft {
     height: calc(var(--vh, 1h)* 100);
@@ -119,11 +115,11 @@ p {
     justify-content: center;
     align-items: flex-end;
     border-right: var(--text) solid 1px;
+    justify-content: center;
+    align-items: center;
 }
 
-.divLeft p {
-    padding-right: calc(70px + 12ch);
-}
+
 
 .divTop,
 .divBottom {
@@ -210,3 +206,4 @@ p {
 .faixas p{
     mix-blend-mode: exclusion;
 }
+

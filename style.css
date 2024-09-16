@@ -83,7 +83,7 @@ main{
 
 #progressTop{
     left: 0;
-    height: calc(var(--vh, 1h)*100);
+    height: 100%;
 }
 
 
@@ -124,11 +124,11 @@ main{
 
 #progressBottom{
     right: 0;
-    height: calc(var(--vh, 1h)*100);
+    height: 100%;
 }
 
 .divLeft {
-    height: calc(var(--vh, 1h)*100);
+    height: calc(var(--vh, 1h)* 100);
     width: 50px;
     position: absolute;
     left: 0;
@@ -220,7 +220,7 @@ main{
 .faixas{
     display: flex;
     margin: 0 2vw;
-    width: calc(100% - 100px);
+    width: calc(100% - 200px);
     position: absolute;
     bottom: 70px;
     z-index: 50;

@@ -8,58 +8,25 @@ const divBottom = document.querySelector('.divBottom');
 const divLeft = document.querySelector('.divLeft');
 const divTop = document.querySelector('.divTop');
 const cursor = document.getElementById("cursor"); 
-const loadingMessage = document.getElementById('loadingMessage');  // A nova mensagem de loading
-
 
 const margin = 50; 
 let isActive = false; 
 let currentTrack = null;
 let previousTrack = null;
 
+
+startButton.addEventListener('click', function() {
+    // Ações que iniciam vídeo e áudio após o clique
+    videos.forEach(video => {
+        video.play();
+    });
+    poesiaAudio.play();
+    jazzAudio.play();
+});
+
 function getRandomValue(min, max) {
     return Math.random() * (max - min) + min;
 }
-
-startButton.addEventListener('click', function() {
-    // Exibe a mensagem de loading
-    loadingMessage.style.display = 'block';
-
-    // Define eventos para cada vídeo para esconder o "loading" assim que estiver pronto
-    let videosLoaded = 0;
-    videos.forEach(video => {
-        video.addEventListener('canplaythrough', function() {
-            videosLoaded++;
-            if (videosLoaded === videos.length) {
-                // Quando todos os vídeos estiverem prontos, esconder a mensagem de loading
-                loadingMessage.style.display = 'none';
-            }
-        });
-        video.load(); // Inicia o carregamento do vídeo
-    });
-
-    if (currentTrack === null) {
-        currentTrack = 1;
-    }
-    showTrack(currentTrack);
-
-    videos.forEach(video => {
-        video.style.opacity = '1';
-        video.play();
-    });
-
-    legendas.forEach(legenda => {
-        legenda.style.opacity = '1';
-        legenda.play();
-    });
-
-    poesiaAudio.play();
-    jazzAudio.play();
-
-    startButton.style.opacity = '0';
-    isActive = true;
-
-    initializeProgress();
-});
 
 function initializeProgress() {
     const randomVideoOpacity = getRandomValue(0.8, 1); 

@@ -54,12 +54,21 @@ body {
 
 p {
     font-weight: 800;
+    color: var(--bg-color);
+    mix-blend-mode: difference;
 }
 
 main{
     position: relative;
 }
 
+
+.progress{
+    background-color: var(--text);
+    position: absolute;
+    z-index: -1;
+    mix-blend-mode: multiply;
+}
 
 
 .divTop {
@@ -68,8 +77,13 @@ main{
     position: absolute;
     top: 0;
     justify-content: flex-end;
-    border-bottom: var(--text) solid 1px;
+    border-bottom: black solid 1px;
     justify-content: center;
+}
+
+#progressTop{
+    left: 0;
+    height: 100%;
 }
 
 
@@ -82,8 +96,13 @@ main{
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    border-left: var(--text) solid 1px;
+    border-left: black solid 1px;
     align-items: center;
+}
+
+#progressRight{
+    top: 0;
+    width: 100%;
 }
 
 .divRight p {
@@ -99,11 +118,14 @@ main{
     height: 50px;
     position: absolute;
     bottom: 0;
-    border-top: var(--text) solid 1px;
+    border-top: black solid 1px;
     justify-content: center;
 }
 
-
+#progressBottom{
+    right: 0;
+    height: 100%;
+}
 
 .divLeft {
     height: calc(var(--vh, 1h)* 100);
@@ -114,12 +136,15 @@ main{
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    border-right: var(--text) solid 1px;
+    border-right: black solid 1px;
     justify-content: center;
     align-items: center;
 }
 
-
+#progressLeft{
+    bottom: 0;
+    width: 100%;
+}
 
 .divTop,
 .divBottom {
@@ -162,7 +187,8 @@ main{
     font-size: 70px;
     line-height: 70px;
     position: absolute;
-    mix-blend-mode: exclusion;
+    color: var(--bg-color);
+    mix-blend-mode: difference;
     z-index: 50;
 }
 

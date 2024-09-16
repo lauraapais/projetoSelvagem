@@ -159,13 +159,13 @@ main{
 
 .track {
     padding: 50px;
-    height: calc(100vh - 100px);
+    height: calc(var(--vh, 1h)*100 - 100px); 
     width: calc(100vw - 100px);
 }
 
 .track video {
     object-fit: cover;
-    height: calc(100vh - 100px);
+    height: calc(var(--vh, 1h)*100 - 100px);
     width: calc(100vw - 100px);
 }
 

@@ -219,7 +219,6 @@ main{
 
 .faixas{
     display: flex;
-    margin: 0 2vw;
     width: calc(100% - 100px);
     position: absolute;
     bottom: 70px;
@@ -235,5 +234,18 @@ main{
 
     #cursor{
         display: none;
+    }
+    .faixas{
+        display: flex;
+        width: calc(100% - 100px);
+        position: absolute;
+        bottom: 70px;
+        z-index: 50;
+        justify-content: center;
+        gap:0;
+        justify-content: space-around
+
+        
+
     }
 }

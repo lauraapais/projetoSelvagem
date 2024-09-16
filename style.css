@@ -184,8 +184,8 @@ main{
 }
 
 .title {
-    font-size: 70px;
-    line-height: 70px;
+    font-size: calc(60px + 0.390625vw);
+    line-height: calc(60px + 0.5vw);
     position: absolute;
     color: var(--bg-color);
     mix-blend-mode: difference;
@@ -206,7 +206,7 @@ main{
     stroke-linecap: round;
     stroke-linejoin: round;
     stroke-width: 2px;
-    width: 30px;
+    width: calc(25px + 0.5vw);
     position: absolute;
     top: 50%;
     right: 50%;
@@ -220,7 +220,7 @@ main{
 .faixas{
     display: flex;
     margin: 0 2vw;
-    width: calc(100% - 200px);
+    width: calc(100% - 100px);
     position: absolute;
     bottom: 70px;
     z-index: 50;
@@ -228,8 +228,8 @@ main{
     justify-content: center;
 }
 
-
-.faixas p{
-    mix-blend-mode: exclusion;
+@media screen and (max-width:900px) {
+    .title{
+        display: none;
+    }
 }
-

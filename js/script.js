@@ -18,8 +18,8 @@ function getRandomValue(min, max) {
 }
 
 function initializeProgress() {
-
-    const randomVideoOpacity = getRandomValue(0, 1);
+    // Alterado para garantir opacidade maior que 0.8
+    const randomVideoOpacity = getRandomValue(0.8, 1); 
     videos.forEach(video => {
         video.style.opacity = randomVideoOpacity.toString();  
         if (randomVideoOpacity > 0) {

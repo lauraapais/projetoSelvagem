@@ -220,7 +220,7 @@ main{
 .faixas{
     display: flex;
     margin: 0 2vw;
-    width: calc(100% - 200px);
+    width: calc(100% - 100px);
     position: absolute;
     bottom: 70px;
     z-index: 50;

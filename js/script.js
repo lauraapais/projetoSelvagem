@@ -279,3 +279,119 @@ hoverLinks.forEach((link) => {
         cursor.classList.remove("active");
     });
 });
+
+
+// Adicionando eventos para toque na tela (mobile)
+divRight.addEventListener('touchmove', updateVideoOpacityTouch);
+divBottom.addEventListener('touchmove', updateLegendasOpacityTouch);
+divLeft.addEventListener('touchmove', updatePoesiaVolumeTouch);
+divTop.addEventListener('touchmove', updateJazzVolumeTouch);
+
+// Funções de suporte ao toque
+function updateVideoOpacityTouch(event) {
+    if (!isActive) return;
+
+    const touch = event.touches[0];
+    const rect = divRight.getBoundingClientRect();
+    const touchY = touch.clientY - rect.top;
+    const divHeight = rect.height;
+
+    if (touchY < margin || touchY > divHeight - margin) {
+        return;
+    }
+
+    const adjustedHeight = divHeight - 2 * margin;
+    const adjustedTouchY = touchY - margin;
+    const opacity = Math.min(1, Math.max(0, adjustedTouchY / adjustedHeight));
+
+    videos.forEach(video => video.style.opacity = opacity.toString());
+
+    const progressRight = document.getElementById('progressRight');
+    progressRight.style.height = `${opacity * 100}%`;
+
+    cursor.style.width = `${2 + opacity * 4}em`;
+    cursor.style.height = `${2 + opacity * 4}em`;
+}
+
+function updateLegendasOpacityTouch(event) {
+    if (!isActive) return;
+
+    const touch = event.touches[0];
+    const rect = divBottom.getBoundingClientRect();
+    const touchX = touch.clientX - rect.left;
+    const divWidth = rect.width;
+
+    if (touchX < margin || touchX > divWidth - margin) {
+        return;
+    }
+
+    const adjustedWidth = divWidth - 2 * margin;
+    const adjustedTouchX = touchX - margin;
+    const opacity = 1 - Math.min(1, Math.max(0, adjustedTouchX / adjustedWidth));
+
+    legendas.forEach(legenda => legenda.style.opacity = opacity.toString());
+
+    const progressBottom = document.getElementById('progressBottom');
+    progressBottom.style.width = `${opacity * 100}%`;
+
+    cursor.style.width = `${2 + opacity * 4}em`;
+    cursor.style.height = `${2 + opacity * 4}em`;
+}
+
+function updatePoesiaVolumeTouch(event) {
+    if (!isActive) return;
+
+    const touch = event.touches[0];
+    const rect = divLeft.getBoundingClientRect();
+    const touchY = touch.clientY - rect.top;
+    const divHeight = rect.height;
+
+    if (touchY < margin || touchY > divHeight - margin) {
+        return;
+    }
+
+    const adjustedHeight = divHeight - 2 * margin;
+    const adjustedTouchY = touchY - margin;
+    const volume = 1 - Math.min(1, Math.max(0, adjustedTouchY / adjustedHeight));
+
+    const currentTrackElement = document.querySelector(`.track${currentTrack}`);
+    const currentAudioPoesia = currentTrackElement.querySelector('.poesia');
+    if (currentAudioPoesia) {
+        currentAudioPoesia.volume = volume;
+    }
+
+    const progressLeft = document.getElementById('progressLeft');
+    progressLeft.style.height = `${volume * 100}%`;
+
+    cursor.style.width = `${2 + volume * 4}em`;
+    cursor.style.height = `${2 + volume * 4}em`;
+}
+
+function updateJazzVolumeTouch(event) {
+    if (!isActive) return;
+
+    const touch = event.touches[0];
+    const rect = divTop.getBoundingClientRect();
+    const touchX = touch.clientX - rect.left;
+    const divWidth = rect.width;
+
+    if (touchX < margin || touchX > divWidth - margin) {
+        return;
+    }
+
+    const adjustedWidth = divWidth - 2 * margin;
+    const adjustedTouchX = touchX - margin;
+    const volume = Math.min(1, Math.max(0, adjustedTouchX / adjustedWidth));
+
+    const currentTrackElement = document.querySelector(`.track${currentTrack}`);
+    const currentAudioJazz = currentTrackElement.querySelector('.jazz');
+    if (currentAudioJazz) {
+        currentAudioJazz.volume = volume;
+    }
+
+    const progressTop = document.getElementById('progressTop');
+    progressTop.style.width = `${volume * 100}%`;
+
+    cursor.style.width = `${2 + volume * 4}em`;
+    cursor.style.height = `${2 + volume * 4}em`;
+}

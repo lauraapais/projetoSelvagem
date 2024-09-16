@@ -83,12 +83,12 @@ main{
 
 #progressTop{
     left: 0;
-    height: 100%;
+    height: var(--vh, 1h)*100;
 }
 
 
 .divRight {
-    height: 100vh;
+    height: var(--vh, 1h)*100;
     width: 50px;
     position: absolute;
     right: 0;
@@ -124,7 +124,7 @@ main{
 
 #progressBottom{
     right: 0;
-    height: 100%;
+    height: var(--vh, 1h)*100%;
 }
 
 .divLeft {

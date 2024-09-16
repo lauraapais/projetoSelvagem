@@ -232,4 +232,8 @@ main{
     .title{
         display: none;
     }
+
+    #cursor{
+        display: none;
+    }
 }

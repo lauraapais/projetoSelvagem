@@ -4,10 +4,18 @@ const poesiaAudio = document.querySelector('.track1 .poesia');
 const videoElement = document.querySelector('.track1 .video');
 const legendasVideo = document.querySelector('.track1 .legendas');
 
-videoElement.style.display = legendasVideo.style.display = 'none';
+videoElement.style.display = 'none';
+legendasVideo.style.display = 'none';
+
+let interactionEnabled = false;
 
 startButton.addEventListener('click', () => {
-    [jazzAudio, poesiaAudio, videoElement, legendasVideo].forEach(el => el.play());
+    interactionEnabled = true;
+
+    jazzAudio.play();
+    poesiaAudio.play();
+    videoElement.play();
+    legendasVideo.play();
     
     videoElement.style.display = 'block';
     legendasVideo.style.display = 'block';

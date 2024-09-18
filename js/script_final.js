@@ -16,7 +16,7 @@ faixaElements.forEach(faixa => {
 videoElement.style.display = 'none';
 legendasVideo.style.display = 'none';
 
-let interactionEnabled = false;
+let interactionEnabled = false; // Controle se a interação está habilitada
 
 // Função para definir progresso inicial
 function setInitialProgress() {
@@ -54,7 +54,7 @@ function checkMediaReady() {
 }
 
 startButton.addEventListener('click', () => {
-    interactionEnabled = true;
+    interactionEnabled = true; // Habilita a interação ao clicar no botão de play
 
     faixaElements.forEach(faixa => {
         faixa.removeAttribute('disabled'); 
@@ -131,6 +131,8 @@ function updateProgressBar(progressElement, value, isHorizontal = true) {
 
 // Função para manipular eventos de toque no telemóvel
 function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = true) {
+    if (!interactionEnabled) return; // Verifica se a interação está habilitada
+
     const touch = event.touches[0];
     const rect = progressElement.getBoundingClientRect();
     
@@ -153,6 +155,8 @@ const progressPoesia = divLeft.querySelector('.progress');
 
 // Ajuste de volume para o jazz na divTop
 divTop.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+
     const rect = divTop.getBoundingClientRect();
     const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
     jazzAudio.volume = volume;
@@ -160,6 +164,8 @@ divTop.addEventListener('mousemove', (e) => {
 });
 
 divTop.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+
     handleTouchMove(e, divTop, (volume) => {
         jazzAudio.volume = volume;
         updateProgressBar(progressJazz, volume, true);
@@ -168,6 +174,8 @@ divTop.addEventListener('touchmove', (e) => {
 
 // Ajuste de opacidade para o vídeo na divRight
 divRight.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+
     const rect = divRight.getBoundingClientRect();
     const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
     videoElement.style.opacity = opacity;
@@ -175,6 +183,8 @@ divRight.addEventListener('mousemove', (e) => {
 });
 
 divRight.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+
     handleTouchMove(e, divRight, (opacity) => {
         videoElement.style.opacity = opacity;
         updateProgressBar(progressVideo, opacity, false);
@@ -183,6 +193,8 @@ divRight.addEventListener('touchmove', (e) => {
 
 // Ajuste de volume para a poesia na divLeft (volume invertido)
 divLeft.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+
     const rect = divLeft.getBoundingClientRect();
     const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); // Invertendo o valor
     poesiaAudio.volume = volume;
@@ -190,6 +202,8 @@ divLeft.addEventListener('mousemove', (e) => {
 });
 
 divLeft.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+
     handleTouchMove(e, divLeft, (volume) => {
         volume = 1 - volume; // Volume invertido
         poesiaAudio.volume = volume;

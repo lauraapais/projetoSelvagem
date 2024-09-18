@@ -16,7 +16,6 @@ let previousTrack = null;
 
 
 startButton.addEventListener('click', function() {
-    // Ações que iniciam vídeo e áudio após o clique
     videos.forEach(video => {
         video.play();
     });

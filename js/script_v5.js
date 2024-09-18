@@ -8,10 +8,20 @@ const divBottom = document.querySelector('.divBottom');
 const divLeft = document.querySelector('.divLeft');
 const divTop = document.querySelector('.divTop');
 const cursor = document.getElementById("cursor"); 
+
 const margin = 50; 
 let isActive = false; 
 let currentTrack = null;
 let previousTrack = null;
+
+
+startButton.addEventListener('click', function() {
+    videos.forEach(video => {
+        video.play();
+    });
+    poesiaAudio.play();
+    jazzAudio.play();
+});
 
 function getRandomValue(min, max) {
     return Math.random() * (max - min) + min;

@@ -18,6 +18,17 @@ legendasVideo.style.display = 'none';
 
 let interactionEnabled = false;
 
+// Função para definir progresso inicial
+function setInitialProgress() {
+    jazzAudio.volume = 0.7; // 70% do volume inicial do Jazz
+    poesiaAudio.volume = 0.5; // 50% do volume inicial da Poesia
+    videoElement.style.opacity = 1.0; // 100% de opacidade no início
+
+    updateProgressBar(progressJazz, 0.7, true); // Atualiza a barra de progresso inicial do Jazz
+    updateProgressBar(progressPoesia, 0.5, false); // Atualiza a barra de progresso inicial da Poesia
+    updateProgressBar(progressVideo, 1.0, false); // Atualiza a barra de progresso inicial do Vídeo
+}
+
 function ensureMediaReady(mediaElement, callback) {
     if (mediaElement.readyState >= 3) { 
         callback();
@@ -37,6 +48,8 @@ function checkMediaReady() {
 
         jazzAudio.play();
         poesiaAudio.play();
+
+        setInitialProgress(); // Aplica o progresso inicial
     }
 }
 
@@ -116,6 +129,20 @@ function updateProgressBar(progressElement, value, isHorizontal = true) {
     }
 }
 
+// Função para manipular eventos de toque no telemóvel
+function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = true) {
+    const touch = event.touches[0];
+    const rect = progressElement.getBoundingClientRect();
+    
+    if (isHorizontal) {
+        const value = adjustValue(touch.clientX, rect.left + 50, rect.right - 50);
+        adjustFunction(value);
+    } else {
+        const value = adjustValue(touch.clientY, rect.top + 50, rect.bottom - 50);
+        adjustFunction(value);
+    }
+}
+
 const divTop = document.querySelector('.divTop');
 const divRight = document.querySelector('.divRight');
 const divLeft = document.querySelector('.divLeft');
@@ -132,6 +159,13 @@ divTop.addEventListener('mousemove', (e) => {
     updateProgressBar(progressJazz, volume, true); // Atualiza a largura da barra de progresso
 });
 
+divTop.addEventListener('touchmove', (e) => {
+    handleTouchMove(e, divTop, (volume) => {
+        jazzAudio.volume = volume;
+        updateProgressBar(progressJazz, volume, true);
+    }, true);
+});
+
 // Ajuste de opacidade para o vídeo na divRight
 divRight.addEventListener('mousemove', (e) => {
     const rect = divRight.getBoundingClientRect();
@@ -140,12 +174,27 @@ divRight.addEventListener('mousemove', (e) => {
     updateProgressBar(progressVideo, opacity, false); // Atualiza a altura da barra de progresso
 });
 
+divRight.addEventListener('touchmove', (e) => {
+    handleTouchMove(e, divRight, (opacity) => {
+        videoElement.style.opacity = opacity;
+        updateProgressBar(progressVideo, opacity, false);
+    }, false);
+});
+
 // Ajuste de volume para a poesia na divLeft (volume invertido)
 divLeft.addEventListener('mousemove', (e) => {
     const rect = divLeft.getBoundingClientRect();
     const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); // Invertendo o valor
     poesiaAudio.volume = volume;
     updateProgressBar(progressPoesia, volume, false); // Atualiza a altura da barra de progresso
+});
+
+divLeft.addEventListener('touchmove', (e) => {
+    handleTouchMove(e, divLeft, (volume) => {
+        volume = 1 - volume; // Volume invertido
+        poesiaAudio.volume = volume;
+        updateProgressBar(progressPoesia, volume, false);
+    }, false);
 });
 
 faixaElements.forEach(faixa => {

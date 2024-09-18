@@ -25,8 +25,18 @@ function ensureMediaReady(mediaElement, callback) {
 // Função para verificar se todas as mídias estão prontas
 function checkMediaReady() {
     if (jazzAudio.readyState >= 3 && poesiaAudio.readyState >= 3 && videoElement.readyState >= 3) {
-        // Ocultar o texto de loading quando áudio e vídeo estiverem prontos
+        // Ocultar o texto de loading quando tudo estiver pronto
         loadingText.style.display = 'none';
+        
+        // Garantir que o vídeo está em exibição antes de tocar os áudios
+        videoElement.play();
+        videoElement.style.display = 'block';
+        videoElement.style.opacity = '1';
+        legendasVideo.style.display = 'block';
+
+        // Agora que o vídeo está pronto, tocar os áudios
+        jazzAudio.play();
+        poesiaAudio.play();
     }
 }
 
@@ -42,26 +52,10 @@ startButton.addEventListener('click', () => {
     }
     videoElement.load(); 
 
-    // Garantir que o áudio jazz está pronto
-    ensureMediaReady(jazzAudio, () => {
-        jazzAudio.play();
-        checkMediaReady(); // Verificar se tudo está pronto para esconder o loading
-    });
-
-    // Garantir que o áudio poesia está pronto
-    ensureMediaReady(poesiaAudio, () => {
-        poesiaAudio.play();
-        checkMediaReady(); // Verificar se tudo está pronto para esconder o loading
-    });
-
-    // Garantir que o vídeo está pronto
-    ensureMediaReady(videoElement, () => {
-        videoElement.play();
-        videoElement.style.display = 'block';
-        videoElement.style.opacity = '1';
-        legendasVideo.style.display = 'block';
-        checkMediaReady(); // Verificar se tudo está pronto para esconder o loading
-    });
+    // Garantir que os áudios e o vídeo estão prontos e só tocar quando todos estiverem prontos
+    ensureMediaReady(jazzAudio, checkMediaReady);
+    ensureMediaReady(poesiaAudio, checkMediaReady);
+    ensureMediaReady(videoElement, checkMediaReady);
 
     // Esconder o botão de início após a primeira interação
     startButton.style.display = 'none';
@@ -103,23 +97,10 @@ function playTrack(trackElement) {
     videoElement.src = videoElement.getAttribute('data-src'); 
     videoElement.load();
 
-    ensureMediaReady(jazzAudio, () => {
-        jazzAudio.play();
-        checkMediaReady(); // Verificar se tudo está pronto para esconder o loading
-    });
-
-    ensureMediaReady(poesiaAudio, () => {
-        poesiaAudio.play();
-        checkMediaReady(); // Verificar se tudo está pronto para esconder o loading
-    });
-
-    ensureMediaReady(videoElement, () => {
-        videoElement.play();
-        videoElement.style.display = 'block';
-        videoElement.style.opacity = '1';
-        legendasVideo.style.display = 'block';
-        checkMediaReady(); // Verificar se tudo está pronto para esconder o loading
-    });
+    // Garantir que os áudios e o vídeo estão prontos e só tocar quando todos estiverem prontos
+    ensureMediaReady(jazzAudio, checkMediaReady);
+    ensureMediaReady(poesiaAudio, checkMediaReady);
+    ensureMediaReady(videoElement, checkMediaReady);
 }
 
 const faixaElements = document.querySelectorAll('.faixa');
@@ -127,6 +108,11 @@ faixaElements.forEach(faixa => {
     faixa.addEventListener('click', () => {
         const trackId = faixa.getAttribute('data-track');
         const trackElement = document.getElementById(trackId);
+
+        if (!trackElement) {
+            console.error('Faixa não encontrada:', trackId); 
+            return;
+        }
 
         playTrack(trackElement); 
     });

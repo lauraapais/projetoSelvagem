@@ -19,7 +19,9 @@
         legendasVideo.play();
 
         videoElement.style.display = 'block';
+        videoElement.style.opacity = '1';
         legendasVideo.style.display = 'block';
+        legendasVideo.style.opacity = '1';
 
         startButton.style.display = 'none';
     });

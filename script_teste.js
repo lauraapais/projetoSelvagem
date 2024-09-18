@@ -9,8 +9,12 @@ videoElement.style.display = legendasVideo.style.display = 'none';
 startButton.addEventListener('click', () => {
     [jazzAudio, poesiaAudio, videoElement, legendasVideo].forEach(el => el.play());
     
-    videoElement.style.display = legendasVideo.style.display = 'block';
-    videoElement.style.opacity = legendasVideo.style.opacity = '1';
+    videoElement.style.display = 'block';
+    legendasVideo.style.display = 'block';
+    videoElement.style.opacity = '1';
+    legendasVideo.style.opacity = '1';
+
+    
     
     startButton.style.display = 'none';
 });

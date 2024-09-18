@@ -128,11 +128,6 @@ faixaElements.forEach(faixa => {
         const trackId = faixa.getAttribute('data-track');
         const trackElement = document.getElementById(trackId);
 
-        if (!trackElement) {
-            console.error('Faixa não encontrada:', trackId); 
-            return;
-        }
-
         playTrack(trackElement); 
     });
 });

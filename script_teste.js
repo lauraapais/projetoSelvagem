@@ -3,81 +3,169 @@ const videos = document.querySelectorAll('.video');
 const legendas = document.querySelectorAll('.legendas');  
 const poesiaAudio = document.querySelector('.poesia');  
 const jazzAudio = document.querySelector('.jazz'); 
+const audios = document.querySelectorAll('audio');
 const divRight = document.querySelector('.divRight');
 const divBottom = document.querySelector('.divBottom');
 const divLeft = document.querySelector('.divLeft');
 const divTop = document.querySelector('.divTop');
-const cursor = document.getElementById("cursor"); 
-
 const margin = 50; 
 let isActive = false; 
-
+let currentTrack = null;
+let previousTrack = null; 
 startButton.addEventListener('click', function() {
-    videos.forEach(video => video.play());
+    if (currentTrack === null) {
+        currentTrack = 1;
+    }
+    showTrack(currentTrack);
+
+    videos.forEach(video => {
+        video.style.opacity = '1';
+        video.play();
+    });
+
+    legendas.forEach(legenda => {
+        legenda.style.opacity = '1';
+        legenda.play();
+    });
+
+
+    // Garantir que a poesia e o jazz comecem de maneira sincronizada
     poesiaAudio.play();
     jazzAudio.play();
+
     startButton.style.opacity = '0';
+
     isActive = true;
 });
 
-function getRandomValue(min, max) {
-    return Math.random() * (max - min) + min;
+function hideAllTracks() {
+    for (let i = 1; i <= 8; i++) {
+        const track = document.querySelector(`.track${i}`);
+        if (track) track.style.display = 'none';
+    }
 }
 
-function initializeProgress() {
-    const randomVideoOpacity = getRandomValue(0.8, 1); 
-    videos.forEach(video => video.style.opacity = randomVideoOpacity.toString());
-    const progressRight = document.getElementById('progressRight');
-    progressRight.style.height = `${randomVideoOpacity * 100}%`;
-
-    const randomLegendasOpacity = getRandomValue(0, 1);
-    legendas.forEach(legenda => legenda.style.opacity = randomLegendasOpacity.toString());
-    const progressBottom = document.getElementById('progressBottom');
-    progressBottom.style.width = `${randomLegendasOpacity * 100}%`;
-
-    const randomPoesiaVolume = getRandomValue(0, 1);
-    poesiaAudio.volume = randomPoesiaVolume;
-    const progressLeft = document.getElementById('progressLeft');
-    progressLeft.style.height = `${randomPoesiaVolume * 100}%`;
-
-    const randomJazzVolume = getRandomValue(0, 1);
-    jazzAudio.volume = randomJazzVolume;
-    const progressTop = document.getElementById('progressTop');
-    progressTop.style.width = `${randomJazzVolume * 100}%`;
+function showTrack(trackNumber) {
+    hideAllTracks();
+    const selectedTrack = document.querySelector(`.track${trackNumber}`);
+    if (selectedTrack) selectedTrack.style.display = 'block';
 }
 
-document.addEventListener("mousemove", (e) => {
-    cursor.style.left = e.clientX + "px";
-    cursor.style.top = e.clientY + "px";
+const faixas = document.querySelectorAll('.hover-link');
+faixas.forEach(faixa => {
+    faixa.addEventListener('click', function() {
+        const selectedTrackNumber = this.getAttribute('data-track').replace('faixa', '');
+        changeTrack(selectedTrackNumber);
+    });
 });
 
-function updateOpacity(event, div, items, progress, axis = 'Y') {
+function changeTrack(trackNumber) {
+    if (previousTrack) {
+        const previousTrackElement = document.querySelector(`.track${previousTrack}`);
+        const previousAudio = previousTrackElement.querySelector('audio');
+        const previousVideo = previousTrackElement.querySelector('video');
+
+        if (previousAudio) previousAudio.pause(); 
+        if (previousVideo) previousVideo.pause(); 
+    }
+
+    currentTrack = trackNumber;
+    showTrack(currentTrack);
+
+    const currentTrackElement = document.querySelector(`.track${currentTrack}`);
+    const currentAudio = currentTrackElement.querySelector('audio');
+    const currentVideo = currentTrackElement.querySelector('video');
+
+    if (currentAudio) currentAudio.play(); 
+    if (currentVideo) currentVideo.play(); 
+
+    previousTrack = currentTrack;
+}
+
+function updateVideoOpacity(event) {
     if (!isActive) return;
 
-    const rect = div.getBoundingClientRect();
-    const mousePos = axis === 'Y' ? event.clientY - rect.top : event.clientX - rect.left;
-    const divSize = axis === 'Y' ? rect.height : rect.width;
+    const rect = divRight.getBoundingClientRect();
+    const mouseY = event.clientY - rect.top;
+    const divHeight = rect.height;
+    const adjustedHeight = divHeight - 2 * margin;
 
-    if (mousePos < margin || mousePos > divSize - margin) return;
-
-    const adjustedSize = divSize - 2 * margin;
-    const adjustedMousePos = mousePos - margin;
-    const opacity = Math.min(1, Math.max(0, adjustedMousePos / adjustedSize));
-
-    items.forEach(item => item.style.opacity = opacity.toString());
-    progress.style[axis === 'Y' ? 'height' : 'width'] = `${opacity * 100}%`;
-
-    cursor.style.width = `${2 + opacity * 4}em`;
-    cursor.style.height = `${2 + opacity * 4}em`;
+    if (mouseY < margin) {
+        videos.forEach(video => video.style.opacity = '0');
+    } else if (mouseY > divHeight - margin) {
+        videos.forEach(video => video.style.opacity = '1');
+    } else {
+        const adjustedMouseY = mouseY - margin;
+        const opacity = Math.min(1, Math.max(0, adjustedMouseY / adjustedHeight));
+        videos.forEach(video => video.style.opacity = opacity.toString());
+    }
 }
 
-divRight.addEventListener('mousemove', (e) => updateOpacity(e, divRight, videos, document.getElementById('progressRight')));
-divBottom.addEventListener('mousemove', (e) => updateOpacity(e, divBottom, legendas, document.getElementById('progressBottom'), 'X'));
-divLeft.addEventListener('mousemove', (e) => updateOpacity(e, divLeft, [poesiaAudio], document.getElementById('progressLeft')));
-divTop.addEventListener('mousemove', (e) => updateOpacity(e, divTop, [jazzAudio], document.getElementById('progressTop'), 'X'));
+function updateLegendasOpacity(event) {
+    if (!isActive) return;
 
-const hoverLinks = document.querySelectorAll('.hover-link');
-hoverLinks.forEach((link) => {
-    link.addEventListener('mouseenter', () => cursor.classList.add("active"));
-    link.addEventListener('mouseleave', () => cursor.classList.remove("active"));
-});
+    const rect = divBottom.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;  
+    const divWidth = rect.width;
+    const adjustedWidth = divWidth - 2 * margin;
+
+    if (mouseX < margin) {
+        legendas.forEach(legenda => legenda.style.opacity = '0');
+    } else if (mouseX > divWidth - margin) {
+        legendas.forEach(legenda => legenda.style.opacity = '1');
+    } else {
+        const adjustedMouseX = mouseX - margin;
+        const opacity = Math.min(1, Math.max(0, adjustedMouseX / adjustedWidth));
+        legendas.forEach(legenda => legenda.style.opacity = opacity.toString());
+    }
+}
+
+function updatePoesiaVolume(event) {
+    if (!isActive) return;
+
+    const rect = divLeft.getBoundingClientRect();
+    const mouseY = event.clientY - rect.top;  
+    const divHeight = rect.height;
+    const adjustedHeight = divHeight - 2 * margin;
+
+    if (mouseY < margin) {
+        poesiaAudio.volume = 0;  
+    } else if (mouseY > divHeight - margin) {
+        poesiaAudio.volume = 1; 
+    } else {
+        const adjustedMouseY = mouseY - margin;
+        const volume = Math.min(1, Math.max(0, adjustedMouseY / adjustedHeight));
+        poesiaAudio.volume = volume;  
+    }
+}
+
+function updateJazzVolume(event) {
+    if (!isActive) return;
+
+    const rect = divTop.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left; 
+    const divWidth = rect.width;
+    const adjustedWidth = divWidth - 2 * margin;
+
+    if (mouseX < margin) {
+        jazzAudio.volume = 0;  
+    } else if (mouseX > divWidth - margin) {
+        jazzAudio.volume = 1; 
+    } else {
+        const adjustedMouseX = mouseX - margin;
+        const volume = Math.min(1, Math.max(0, adjustedMouseX / adjustedWidth));
+        jazzAudio.volume = volume;
+    }
+}
+
+
+
+divRight.addEventListener('mousemove', updateVideoOpacity);
+divBottom.addEventListener('mousemove', updateLegendasOpacity);
+divLeft.addEventListener('mousemove', updatePoesiaVolume);
+divTop.addEventListener('mousemove', updateJazzVolume);
+
+
+
+
+

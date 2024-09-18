@@ -60,11 +60,21 @@ function stopCurrentTrack() {
     legendasVideo.style.display = 'none';
 }
 
+// Função para mostrar o loading
+function showLoading() {
+    loadingText.style.display = 'block';
+}
+
+// Função para ocultar o loading
+function hideLoading() {
+    loadingText.style.display = 'none';
+}
+
 function playTrack(trackElement) {
     stopCurrentTrack();  
     
     // Mostrar o texto de loading
-    loadingText.style.display = 'block';
+    showLoading();
 
     currentTrack = trackElement;
 
@@ -76,6 +86,13 @@ function playTrack(trackElement) {
     videoElement.src = videoElement.getAttribute('data-src'); 
     videoElement.load();
 
+    // Se houver problema no carregamento, mostrar loading novamente
+    videoElement.addEventListener('waiting', showLoading);
+    
+    // Quando o vídeo começar a tocar, ocultar o loading
+    videoElement.addEventListener('playing', hideLoading);
+
+    // Se o vídeo carregar normalmente, esconder o loading
     ensureMediaReady(jazzAudio, () => jazzAudio.play());
     ensureMediaReady(poesiaAudio, () => poesiaAudio.play());
 
@@ -84,9 +101,9 @@ function playTrack(trackElement) {
         videoElement.style.display = 'block';
         videoElement.style.opacity = '1';
         legendasVideo.style.display = 'block';
-        
+
         // Ocultar o texto de loading assim que o vídeo estiver pronto
-        loadingText.style.display = 'none';
+        hideLoading();
     });
 }
 

@@ -1,4 +1,4 @@
-const startButton = document.getElementById('startButton');
+/*const startButton = document.getElementById('startButton');
 let currentTrack = document.querySelector('.track1'); 
 
 let jazzAudio = currentTrack.querySelector('.jazz');
@@ -60,21 +60,11 @@ function stopCurrentTrack() {
     legendasVideo.style.display = 'none';
 }
 
-// Função para mostrar o loading
-function showLoading() {
-    loadingText.style.display = 'block';
-}
-
-// Função para ocultar o loading
-function hideLoading() {
-    loadingText.style.display = 'none';
-}
-
 function playTrack(trackElement) {
     stopCurrentTrack();  
     
     // Mostrar o texto de loading
-    showLoading();
+    loadingText.style.display = 'block';
 
     currentTrack = trackElement;
 
@@ -86,13 +76,6 @@ function playTrack(trackElement) {
     videoElement.src = videoElement.getAttribute('data-src'); 
     videoElement.load();
 
-    // Se houver problema no carregamento, mostrar loading novamente
-    videoElement.addEventListener('waiting', showLoading);
-    
-    // Quando o vídeo começar a tocar, ocultar o loading
-    videoElement.addEventListener('playing', hideLoading);
-
-    // Se o vídeo carregar normalmente, esconder o loading
     ensureMediaReady(jazzAudio, () => jazzAudio.play());
     ensureMediaReady(poesiaAudio, () => poesiaAudio.play());
 
@@ -101,9 +84,142 @@ function playTrack(trackElement) {
         videoElement.style.display = 'block';
         videoElement.style.opacity = '1';
         legendasVideo.style.display = 'block';
-
+        
         // Ocultar o texto de loading assim que o vídeo estiver pronto
-        hideLoading();
+        loadingText.style.display = 'none';
+    });
+}
+
+const faixaElements = document.querySelectorAll('.faixa');
+faixaElements.forEach(faixa => {
+    faixa.addEventListener('click', () => {
+        const trackId = faixa.getAttribute('data-track');
+        const trackElement = document.getElementById(trackId);
+
+        if (!trackElement) {
+            console.error('Faixa não encontrada:', trackId); 
+            return;
+        }
+
+        playTrack(trackElement); 
+    });
+});*/
+
+
+const startButton = document.getElementById('startButton');
+let currentTrack = document.querySelector('.track1'); 
+
+let jazzAudio = currentTrack.querySelector('.jazz');
+let poesiaAudio = currentTrack.querySelector('.poesia');
+let videoElement = currentTrack.querySelector('.video');
+let legendasVideo = currentTrack.querySelector('.legendas');
+
+// Selecionar o elemento de loading
+const loadingText = document.getElementById('loadingText');
+
+videoElement.style.display = 'none';
+legendasVideo.style.display = 'none';
+
+let interactionEnabled = false;
+
+function ensureMediaReady(mediaElement, callback) {
+    if (mediaElement.readyState >= 3) { 
+        callback();
+    } else {
+        mediaElement.addEventListener('canplaythrough', callback, { once: true });
+    }
+}
+
+startButton.addEventListener('click', () => {
+    interactionEnabled = true;
+
+    // Mostrar o texto de loading antes de carregar as mídias na primeira interação
+    loadingText.style.display = 'block';
+
+    // Carregar os vídeos e áudios
+    if (!videoElement.src) {
+        videoElement.src = videoElement.getAttribute('data-src');
+    }
+    videoElement.load(); 
+
+    // Garantir que o áudio jazz está pronto
+    ensureMediaReady(jazzAudio, () => {
+        jazzAudio.play();
+        // Verificar se tanto o áudio quanto o vídeo estão prontos para esconder o loading
+        checkMediaReady();
+    });
+
+    // Garantir que o áudio poesia está pronto
+    ensureMediaReady(poesiaAudio, () => {
+        poesiaAudio.play();
+        // Verificar se tanto o áudio quanto o vídeo estão prontos para esconder o loading
+        checkMediaReady();
+    });
+
+    // Garantir que o vídeo está pronto
+    ensureMediaReady(videoElement, () => {
+        videoElement.play();
+        videoElement.style.display = 'block';
+        videoElement.style.opacity = '1';
+        legendasVideo.style.display = 'block';
+        
+        // Verificar se tanto o áudio quanto o vídeo estão prontos para esconder o loading
+        checkMediaReady();
+    });
+
+    // Esconder o botão de início após a primeira interação
+    startButton.style.display = 'none';
+});
+
+// Verificar se todas as mídias estão prontas para esconder o texto de loading
+function checkMediaReady() {
+    if (jazzAudio.readyState >= 3 && poesiaAudio.readyState >= 3 && videoElement.readyState >= 3) {
+        // Ocultar o texto de loading quando áudio e vídeo estiverem prontos
+        loadingText.style.display = 'none';
+    }
+}
+
+function stopCurrentTrack() {
+    if (jazzAudio) {
+        jazzAudio.pause();
+        jazzAudio.currentTime = 0; // Reinicia o áudio
+    }
+    if (poesiaAudio) {
+        poesiaAudio.pause();
+        poesiaAudio.currentTime = 0; // Reinicia o áudio
+    }
+    if (videoElement) {
+        videoElement.pause();
+        videoElement.currentTime = 0; // Reinicia o vídeo
+        videoElement.src = ''; // Limpa o src para garantir que o vídeo será recarregado
+        videoElement.load(); 
+    }
+
+    videoElement.style.display = 'none';
+    legendasVideo.style.display = 'none';
+}
+
+function playTrack(trackElement) {
+    stopCurrentTrack();  
+
+    currentTrack = trackElement;
+
+    jazzAudio = currentTrack.querySelector('.jazz');
+    poesiaAudio = currentTrack.querySelector('.poesia');
+    videoElement = currentTrack.querySelector('.video');
+    legendasVideo = currentTrack.querySelector('.legendas');
+
+    videoElement.src = videoElement.getAttribute('data-src'); 
+    videoElement.load();
+
+    ensureMediaReady(jazzAudio, () => jazzAudio.play());
+    ensureMediaReady(poesiaAudio, () => poesiaAudio.play());
+
+    ensureMediaReady(videoElement, () => {
+        videoElement.play();
+        videoElement.style.display = 'block';
+        videoElement.style.opacity = '1';
+        legendasVideo.style.display = 'block';
     });
 }
 

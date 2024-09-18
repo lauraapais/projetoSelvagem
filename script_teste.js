@@ -15,12 +15,9 @@ startButton.addEventListener('click', () => {
     jazzAudio.play();
     poesiaAudio.play();
     videoElement.play();
-    legendasVideo.play();
     
     videoElement.style.display = 'block';
-    legendasVideo.style.display = 'block';
     videoElement.style.opacity = '1';
-    legendasVideo.style.opacity = '1';
 
     startButton.style.display = 'none';
 });

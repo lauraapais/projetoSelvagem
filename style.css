@@ -223,8 +223,7 @@ main{
 }
 
 .faixas p{
-    color: var(--bg-color);
-    mix-blend-mode: difference;
+    color: var(--text);
 }
 
 @media screen and (max-width:900px) {

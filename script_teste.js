@@ -71,7 +71,6 @@ faixaElements.forEach(faixa => {
 
 
 const startButton = document.getElementById('startButton');
-const mediaTracks = document.querySelectorAll('.mediaTrack'); 
 let currentTrack = document.querySelector('.track1'); 
 
 let jazzAudio = currentTrack.querySelector('.jazz');
@@ -96,6 +95,7 @@ function ensureMediaReady(mediaElement, callback) {
 startButton.addEventListener('click', () => {
     interactionEnabled = true;
 
+    // Carregar apenas o vídeo atual ao clicar no start
     ensureMediaReady(jazzAudio, () => jazzAudio.play());
     ensureMediaReady(poesiaAudio, () => poesiaAudio.play());
     ensureMediaReady(videoElement, () => videoElement.play());
@@ -109,14 +109,19 @@ startButton.addEventListener('click', () => {
 function stopCurrentTrack() {
     if (jazzAudio) jazzAudio.pause();
     if (poesiaAudio) poesiaAudio.pause();
-    if (videoElement) videoElement.pause();
+    if (videoElement) {
+        videoElement.pause();
+        // Remove a fonte do vídeo para liberar memória
+        videoElement.src = '';
+        videoElement.load();  // Recarrega para reiniciar o estado do vídeo
+    }
 
     videoElement.style.display = 'none';
     legendasVideo.style.display = 'none';
 }
 
 function playTrack(trackElement) {
-    stopCurrentTrack(); 
+    stopCurrentTrack();  // Para e descarrega a faixa atual
 
     currentTrack = trackElement;
 
@@ -124,6 +129,10 @@ function playTrack(trackElement) {
     poesiaAudio = currentTrack.querySelector('.poesia');
     videoElement = currentTrack.querySelector('.video');
     legendasVideo = currentTrack.querySelector('.legendas');
+
+    // Defina a fonte do vídeo para carregar o vídeo necessário
+    videoElement.src = videoElement.getAttribute('data-src'); // O "data-src" contém o link do vídeo
+    videoElement.load(); // Carrega o vídeo para reproduzi-lo
 
     // Garantir que os elementos de mídia estão prontos antes de reproduzir
     ensureMediaReady(jazzAudio, () => jazzAudio.play());

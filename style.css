@@ -45,6 +45,11 @@
     padding: 0;
 }
 
+html,
+body{
+    overscroll-behavior-y: contain ;
+}
+
 body {
     background-color: var(--bg-color);
     font-family: "HelveticaNeue";

@@ -9,6 +9,12 @@ let legendasVideo = currentTrack.querySelector('.legendas');
 // Selecionar o elemento de loading
 const loadingText = document.getElementById('loadingText');
 
+// Desabilitar interação até que o botão de start seja clicado
+const faixaElements = document.querySelectorAll('.faixa');
+faixaElements.forEach(faixa => {
+    faixa.setAttribute('disabled', true); // Bloquear as faixas inicialmente
+});
+
 videoElement.style.display = 'none';
 legendasVideo.style.display = 'none';
 
@@ -42,6 +48,11 @@ function checkMediaReady() {
 
 startButton.addEventListener('click', () => {
     interactionEnabled = true;
+
+    // Habilitar as faixas após o clique no botão de start
+    faixaElements.forEach(faixa => {
+        faixa.removeAttribute('disabled'); // Desbloquear faixas
+    });
 
     // Mostrar o texto de loading antes de carregar as mídias na primeira interação
     loadingText.style.display = 'block';
@@ -103,9 +114,10 @@ function playTrack(trackElement) {
     ensureMediaReady(videoElement, checkMediaReady);
 }
 
-const faixaElements = document.querySelectorAll('.faixa');
 faixaElements.forEach(faixa => {
     faixa.addEventListener('click', () => {
+        if (!interactionEnabled) return; // Evita interação se o botão de start não foi pressionado
+
         const trackId = faixa.getAttribute('data-track');
         const trackElement = document.getElementById(trackId);
 

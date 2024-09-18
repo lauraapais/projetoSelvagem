@@ -101,6 +101,35 @@ function playTrack(trackElement) {
     ensureMediaReady(videoElement, checkMediaReady);
 }
 
+function adjustValue(position, start, end) {
+    if (position < start) return 0;
+    if (position > end) return 1;
+    return (position - start) / (end - start);
+}
+
+const divTop = document.querySelector('.divTop');
+const divRight = document.querySelector('.divRight');
+const divLeft = document.querySelector('.divLeft');
+
+divTop.addEventListener('mousemove', (e) => {
+    const rect = divTop.getBoundingClientRect();
+    const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
+    jazzAudio.volume = volume;
+});
+
+divRight.addEventListener('mousemove', (e) => {
+    const rect = divRight.getBoundingClientRect();
+    const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
+    videoElement.style.opacity = opacity;
+});
+
+divLeft.addEventListener('mousemove', (e) => {
+    const rect = divLeft.getBoundingClientRect();
+    const volume = adjustValue(e.clientY,  rect.top + 50, rect.bottom - 50);
+    poesiaAudio.volume = volume;
+});
+
+
 faixaElements.forEach(faixa => {
     faixa.addEventListener('click', () => {
         if (!interactionEnabled) return; 
@@ -111,5 +140,8 @@ faixaElements.forEach(faixa => {
         playTrack(trackElement); 
     });
 });
+
+
+
 
 

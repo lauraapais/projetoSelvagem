@@ -107,28 +107,46 @@ function adjustValue(position, start, end) {
     return (position - start) / (end - start);
 }
 
+// Função para ajustar a largura ou altura da barra de progresso
+function updateProgressBar(progressElement, value, isHorizontal = true) {
+    if (isHorizontal) {
+        progressElement.style.width = (value * 100) + '%';
+    } else {
+        progressElement.style.height = (value * 100) + '%';
+    }
+}
+
 const divTop = document.querySelector('.divTop');
 const divRight = document.querySelector('.divRight');
 const divLeft = document.querySelector('.divLeft');
 
+const progressJazz = divTop.querySelector('.progress');
+const progressVideo = divRight.querySelector('.progress');
+const progressPoesia = divLeft.querySelector('.progress');
+
+// Ajuste de volume para o jazz na divTop
 divTop.addEventListener('mousemove', (e) => {
     const rect = divTop.getBoundingClientRect();
     const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
     jazzAudio.volume = volume;
+    updateProgressBar(progressJazz, volume, true); // Atualiza a largura da barra de progresso
 });
 
+// Ajuste de opacidade para o vídeo na divRight
 divRight.addEventListener('mousemove', (e) => {
     const rect = divRight.getBoundingClientRect();
     const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
     videoElement.style.opacity = opacity;
+    updateProgressBar(progressVideo, opacity, false); // Atualiza a altura da barra de progresso
 });
 
+// Ajuste de volume para a poesia na divLeft (volume invertido)
 divLeft.addEventListener('mousemove', (e) => {
     const rect = divLeft.getBoundingClientRect();
-    const volume = adjustValue(e.clientY,  rect.top + 50, rect.bottom - 50);
+    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); // Invertendo o valor
     poesiaAudio.volume = volume;
+    updateProgressBar(progressPoesia, volume, false); // Atualiza a altura da barra de progresso
 });
-
 
 faixaElements.forEach(faixa => {
     faixa.addEventListener('click', () => {
@@ -140,8 +158,3 @@ faixaElements.forEach(faixa => {
         playTrack(trackElement); 
     });
 });
-
-
-
-
-

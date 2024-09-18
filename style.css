@@ -54,8 +54,7 @@ body {
 
 p {
     font-weight: 800;
-    color: var(--bg-color);
-    mix-blend-mode: difference;
+   
 }
 
 main{
@@ -86,6 +85,10 @@ main{
     height: 100%;
 }
 
+.slider p{
+    color: var(--bg-color);
+    mix-blend-mode: difference;
+}
 
 .divRight {
     height: calc(var(--vh, 1h)*100);
@@ -217,6 +220,10 @@ main{
     z-index: 50;
     gap: 3vw;
     justify-content: center;
+}
+
+.faixa p{
+    color: black !important;
 }
 
 @media screen and (max-width:900px) {

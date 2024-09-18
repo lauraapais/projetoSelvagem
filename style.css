@@ -222,8 +222,9 @@ main{
     justify-content: center;
 }
 
-.faixa p{
-    color: black !important;
+.faixas p{
+    color: var(--bg-color);
+    mix-blend-mode: difference;
 }
 
 @media screen and (max-width:900px) {

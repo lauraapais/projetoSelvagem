@@ -6,17 +6,8 @@ let poesiaAudio = currentTrack.querySelector('.poesia');
 let videoElement = currentTrack.querySelector('.video');
 let legendasVideo = currentTrack.querySelector('.legendas');
 
-// Elemento de loading
-const loadingText = document.createElement('div');
-loadingText.innerText = 'Loading...';
-loadingText.style.display = 'none';
-loadingText.style.position = 'absolute';
-loadingText.style.top = '50%';
-loadingText.style.left = '50%';
-loadingText.style.transform = 'translate(-50%, -50%)';
-loadingText.style.fontSize = '24px';
-loadingText.style.color = '#fff';
-document.body.appendChild(loadingText);
+// Selecionar o elemento de loading
+const loadingText = document.getElementById('loadingText');
 
 videoElement.style.display = 'none';
 legendasVideo.style.display = 'none';

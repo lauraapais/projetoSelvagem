@@ -226,6 +226,18 @@ main{
     color: var(--text);
 }
 
+.loading-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo semi-transparente para destaque */
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
 @media screen and (max-width:900px) {
     #cursor{
         display: none;

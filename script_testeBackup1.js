@@ -38,18 +38,11 @@ startButton.addEventListener('click', () => {
 });
 
 function stopCurrentTrack() {
-    if (jazzAudio) {
-        jazzAudio.pause();
-        jazzAudio.currentTime = 0; // Reinicia o áudio
-    }
-    if (poesiaAudio) {
-        poesiaAudio.pause();
-        poesiaAudio.currentTime = 0; // Reinicia o áudio
-    }
+    if (jazzAudio) jazzAudio.pause();
+    if (poesiaAudio) poesiaAudio.pause();
     if (videoElement) {
         videoElement.pause();
-        videoElement.currentTime = 0; // Reinicia o vídeo
-        videoElement.src = ''; // Limpa o src para garantir que o vídeo será recarregado
+        videoElement.src = '';
         videoElement.load(); 
     }
 

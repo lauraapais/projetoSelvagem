@@ -214,7 +214,7 @@ divBottom.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
 
     const rect = divBottom.getBoundingClientRect();
-    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50); // Inverte a opacidade
+    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50);
     legendasVideo.style.opacity = opacity;
     updateProgressBar(progressLegendas, opacity, true);
 });
@@ -223,8 +223,8 @@ divBottom.addEventListener('touchmove', (e) => {
     if (!interactionEnabled) return;
 
     handleTouchMove(e, divBottom, (opacity) => {
-        legendasVideo.style.opacity = 1 - opacity; // Ajusta a opacidade normalmente
-        updateProgressBar(progressLegendas, 1 - opacity, true); // Inverte o progresso da barra
+        legendasVideo.style.opacity = 1 - opacity; 
+        updateProgressBar(progressLegendas, 1 - opacity, true); 
     }, true);
 });
 

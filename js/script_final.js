@@ -212,8 +212,8 @@ divRight.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return; 
 
     const rect = divRight.getBoundingClientRect();
-    const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
-    videoElement.style.opacity = 1 - opacity;
+    const opacity = 1-adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
+    videoElement.style.opacity =  opacity;
     updateProgressBar(progressVideo, opacity, false);
 
     cursor.style.width = `${2 + opacity * 4}em`;

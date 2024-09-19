@@ -109,7 +109,7 @@ main{
 }
 
 #progressRight{
-    top: 0;
+    bottom: 0;
     width: 100%;
 }
 
@@ -131,7 +131,7 @@ main{
 }
 
 #progressBottom{
-    right: 0;
+    left: 0;
     height: 100%;
 }
 

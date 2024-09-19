@@ -13,6 +13,7 @@ faixaElements.forEach(faixa => {
     faixa.setAttribute('disabled', true); 
 });
 
+
 videoElement.style.display = 'none';
 legendasVideo.style.display = 'none';
 

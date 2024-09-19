@@ -31,6 +31,20 @@ function setInitialProgress() {
 }
 
 
+// Adicionando o cursor customizado
+const cursor = document.getElementById("cursor");
+document.addEventListener("mousemove", (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    cursor.style.left = mouseX + "px";
+    cursor.style.top = mouseY + "px";
+});
+
+function adjustCursorSize(value) {
+    cursor.style.width = `${2 + value * 4}em`;
+    cursor.style.height = `${2 + value * 4}em`;
+}
+
 function ensureMediaReady(mediaElement, callback) {
     if (mediaElement.readyState >= 3) { 
         callback();
@@ -202,8 +216,8 @@ divRight.addEventListener('mousemove', (e) => {
     videoElement.style.opacity = opacity;
     updateProgressBar(progressVideo, opacity, false);
 
-    cursor.style.width = `${2 + volume * 4}em`;
-    cursor.style.height = `${2 + volume * 4}em`;
+    cursor.style.width = `${2 + opacity * 4}em`;
+    cursor.style.height = `${2 + opacity * 4}em`;
 });
 
 divRight.addEventListener('touchmove', (e) => {
@@ -224,8 +238,8 @@ divBottom.addEventListener('mousemove', (e) => {
     legendasVideo.style.opacity = opacity;
     updateProgressBar(progressLegendas, opacity, true);
 
-    cursor.style.width = `${2 + volume * 4}em`;
-    cursor.style.height = `${2 + volume * 4}em`;
+    cursor.style.width = `${2 + opacity * 4}em`;
+    cursor.style.height = `${2 + opacity * 4}em`;
 });
 
 divBottom.addEventListener('touchmove', (e) => {
@@ -272,6 +286,18 @@ faixaElements.forEach(faixa => {
 });
 
 
+
+const hoverLinks = document.querySelectorAll('.hover-link');
+
+hoverLinks.forEach((link) => {
+    link.addEventListener('mouseenter', () => {
+        cursor.classList.add("active");
+    });
+
+    link.addEventListener('mouseleave', () => {
+        cursor.classList.remove("active");
+    });
+});
 
 
 

@@ -16,7 +16,17 @@ faixaElements.forEach(faixa => {
 videoElement.style.display = 'none';
 legendasVideo.style.display = 'none';
 
-let interactionEnabled = false;
+let interactionEnabled = false; 
+
+function setInitialProgress() {
+    jazzAudio.volume = 0.7; 
+    poesiaAudio.volume = 0.5; 
+    videoElement.style.opacity = 1.0;
+
+    updateProgressBar(progressJazz, 0.7, true);
+    updateProgressBar(progressPoesia, 0.5, false);
+    updateProgressBar(progressVideo, 1.0, false); 
+}
 
 function ensureMediaReady(mediaElement, callback) {
     if (mediaElement.readyState >= 3) { 
@@ -37,11 +47,13 @@ function checkMediaReady() {
 
         jazzAudio.play();
         poesiaAudio.play();
+
+        setInitialProgress(); 
     }
 }
 
 startButton.addEventListener('click', () => {
-    interactionEnabled = true;
+    interactionEnabled = true; 
 
     faixaElements.forEach(faixa => {
         faixa.removeAttribute('disabled'); 
@@ -107,28 +119,91 @@ function adjustValue(position, start, end) {
     return (position - start) / (end - start);
 }
 
+function updateProgressBar(progressElement, value, isHorizontal = true) {
+    if (isHorizontal) {
+        progressElement.style.width = (value * 100) + '%';
+    } else {
+        progressElement.style.height = (value * 100) + '%';
+    }
+}
+
+function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = true) {
+    if (!interactionEnabled) return;
+
+    const touch = event.touches[0];
+    const rect = progressElement.getBoundingClientRect();
+    
+    if (isHorizontal) {
+        const value = adjustValue(touch.clientX, rect.left + 50, rect.right - 50);
+        adjustFunction(value);
+    } else {
+        const value = adjustValue(touch.clientY, rect.top + 50, rect.bottom - 50);
+        adjustFunction(value);
+    }
+}
+
 const divTop = document.querySelector('.divTop');
 const divRight = document.querySelector('.divRight');
 const divLeft = document.querySelector('.divLeft');
 
+const progressJazz = divTop.querySelector('.progress');
+const progressVideo = divRight.querySelector('.progress');
+const progressPoesia = divLeft.querySelector('.progress');
+
 divTop.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return;
+
     const rect = divTop.getBoundingClientRect();
     const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
     jazzAudio.volume = volume;
+    updateProgressBar(progressJazz, volume, true); 
+});
+
+divTop.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return; 
+
+    handleTouchMove(e, divTop, (volume) => {
+        jazzAudio.volume = volume;
+        updateProgressBar(progressJazz, volume, true);
+    }, true);
 });
 
 divRight.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return; 
+
     const rect = divRight.getBoundingClientRect();
     const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
     videoElement.style.opacity = opacity;
+    updateProgressBar(progressVideo, opacity, false);
+});
+
+divRight.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return; 
+
+    handleTouchMove(e, divRight, (opacity) => {
+        videoElement.style.opacity = opacity;
+        updateProgressBar(progressVideo, opacity, false);
+    }, false);
 });
 
 divLeft.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return; 
+
     const rect = divLeft.getBoundingClientRect();
-    const volume = adjustValue(e.clientY,  rect.top + 50, rect.bottom - 50);
+    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
     poesiaAudio.volume = volume;
+    updateProgressBar(progressPoesia, volume, false); 
 });
 
+divLeft.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return; 
+
+    handleTouchMove(e, divLeft, (volume) => {
+        volume = 1 - volume;
+        poesiaAudio.volume = volume;
+        updateProgressBar(progressPoesia, volume, false);
+    }, false);
+});
 
 faixaElements.forEach(faixa => {
     faixa.addEventListener('click', () => {
@@ -140,8 +215,3 @@ faixaElements.forEach(faixa => {
         playTrack(trackElement); 
     });
 });
-
-
-
-
-

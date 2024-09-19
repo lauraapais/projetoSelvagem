@@ -225,10 +225,11 @@ main{
     z-index: 50;
     gap: 3vw;
     justify-content: center;
+    mix-blend-mode: difference;
 }
 
 .faixas p{
-    color: var(--text);
+    color: var(--bg-color);
 }
 
 .loading-text {

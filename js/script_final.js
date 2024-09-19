@@ -16,17 +16,18 @@ faixaElements.forEach(faixa => {
 videoElement.style.display = 'none';
 legendasVideo.style.display = 'none';
 
-let interactionEnabled = false; // Controle se a interação está habilitada
+let interactionEnabled = false; 
 
-// Função para definir progresso inicial
 function setInitialProgress() {
-    jazzAudio.volume = 0.7; // 70% do volume inicial do Jazz
-    poesiaAudio.volume = 0.5; // 50% do volume inicial da Poesia
-    videoElement.style.opacity = 1.0; // 100% de opacidade no início
+    jazzAudio.volume = 0.7; 
+    poesiaAudio.volume = 0.5; 
+    videoElement.style.opacity = 1.0;
+    legendasVideo.style.opacity = 1.0;
 
-    updateProgressBar(progressJazz, 0.7, true); // Atualiza a barra de progresso inicial do Jazz
-    updateProgressBar(progressPoesia, 0.5, false); // Atualiza a barra de progresso inicial da Poesia
-    updateProgressBar(progressVideo, 1.0, false); // Atualiza a barra de progresso inicial do Vídeo
+    updateProgressBar(progressJazz, 0.7, true);
+    updateProgressBar(progressPoesia, 0.5, false);
+    updateProgressBar(progressVideo, 1.0, false); 
+    updateProgressBar(legendasVideo, 1.0, false); 
 }
 
 function ensureMediaReady(mediaElement, callback) {
@@ -38,23 +39,25 @@ function ensureMediaReady(mediaElement, callback) {
 }
 
 function checkMediaReady() {
-    if (jazzAudio.readyState >= 3 && poesiaAudio.readyState >= 3 && videoElement.readyState >= 3) {
+    if (jazzAudio.readyState >= 3 && poesiaAudio.readyState >= 3 && videoElement.readyState >= 3 && legendasVideo.readyState >= 3) {
         loadingText.style.display = 'none';
         
         videoElement.play();
         videoElement.style.display = 'block';
         videoElement.style.opacity = '1';
+        legendasVideo.play();
         legendasVideo.style.display = 'block';
+        legendasVideo.style.opacity = '1';
 
         jazzAudio.play();
         poesiaAudio.play();
 
-        setInitialProgress(); // Aplica o progresso inicial
+        setInitialProgress(); 
     }
 }
 
 startButton.addEventListener('click', () => {
-    interactionEnabled = true; // Habilita a interação ao clicar no botão de play
+    interactionEnabled = true; 
 
     faixaElements.forEach(faixa => {
         faixa.removeAttribute('disabled'); 
@@ -67,9 +70,15 @@ startButton.addEventListener('click', () => {
     }
     videoElement.load(); 
 
+    if (!legendasVideo.src) {
+        legendasVideo.src = legendasVideo.getAttribute('data-src');
+    }
+    legendasVideo.load(); 
+
     ensureMediaReady(jazzAudio, checkMediaReady);
     ensureMediaReady(poesiaAudio, checkMediaReady);
     ensureMediaReady(videoElement, checkMediaReady);
+    ensureMediaReady(legendasVideo, checkMediaReady);
 
     startButton.style.display = 'none';
 });
@@ -88,6 +97,12 @@ function stopCurrentTrack() {
         videoElement.currentTime = 0; 
         videoElement.src = ''; 
         videoElement.load(); 
+    }
+    if (legendasVideo) {
+        legendasVideo.pause();
+        legendasVideo.currentTime = 0; 
+        legendasVideo.src = ''; 
+        legendasVideo.load(); 
     }
 
     videoElement.style.display = 'none';
@@ -109,9 +124,13 @@ function playTrack(trackElement) {
     videoElement.src = videoElement.getAttribute('data-src'); 
     videoElement.load();
 
+    legendasVideo.src = legendasVideo.getAttribute('data-src'); 
+    legendasVideo.load();
+
     ensureMediaReady(jazzAudio, checkMediaReady);
     ensureMediaReady(poesiaAudio, checkMediaReady);
     ensureMediaReady(videoElement, checkMediaReady);
+    ensureMediaReady(legendasVideo, checkMediaReady);
 }
 
 function adjustValue(position, start, end) {
@@ -120,7 +139,6 @@ function adjustValue(position, start, end) {
     return (position - start) / (end - start);
 }
 
-// Função para ajustar a largura ou altura da barra de progresso
 function updateProgressBar(progressElement, value, isHorizontal = true) {
     if (isHorizontal) {
         progressElement.style.width = (value * 100) + '%';
@@ -129,9 +147,8 @@ function updateProgressBar(progressElement, value, isHorizontal = true) {
     }
 }
 
-// Função para manipular eventos de toque no telemóvel
 function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = true) {
-    if (!interactionEnabled) return; // Verifica se a interação está habilitada
+    if (!interactionEnabled) return;
 
     const touch = event.touches[0];
     const rect = progressElement.getBoundingClientRect();
@@ -148,23 +165,24 @@ function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = 
 const divTop = document.querySelector('.divTop');
 const divRight = document.querySelector('.divRight');
 const divLeft = document.querySelector('.divLeft');
+const divBottom = document.querySelector('.divBottom');
 
 const progressJazz = divTop.querySelector('.progress');
 const progressVideo = divRight.querySelector('.progress');
 const progressPoesia = divLeft.querySelector('.progress');
+const progressLegendas = divBottom.querySelector('.progress');
 
-// Ajuste de volume para o jazz na divTop
 divTop.addEventListener('mousemove', (e) => {
-    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+    if (!interactionEnabled) return;
 
     const rect = divTop.getBoundingClientRect();
     const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
     jazzAudio.volume = volume;
-    updateProgressBar(progressJazz, volume, true); // Atualiza a largura da barra de progresso
+    updateProgressBar(progressJazz, volume, true); 
 });
 
 divTop.addEventListener('touchmove', (e) => {
-    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+    if (!interactionEnabled) return; 
 
     handleTouchMove(e, divTop, (volume) => {
         jazzAudio.volume = volume;
@@ -172,18 +190,17 @@ divTop.addEventListener('touchmove', (e) => {
     }, true);
 });
 
-// Ajuste de opacidade para o vídeo na divRight
 divRight.addEventListener('mousemove', (e) => {
-    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+    if (!interactionEnabled) return; 
 
     const rect = divRight.getBoundingClientRect();
     const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
     videoElement.style.opacity = opacity;
-    updateProgressBar(progressVideo, opacity, false); // Atualiza a altura da barra de progresso
+    updateProgressBar(progressVideo, opacity, false);
 });
 
 divRight.addEventListener('touchmove', (e) => {
-    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+    if (!interactionEnabled) return; 
 
     handleTouchMove(e, divRight, (opacity) => {
         videoElement.style.opacity = opacity;
@@ -191,21 +208,41 @@ divRight.addEventListener('touchmove', (e) => {
     }, false);
 });
 
-// Ajuste de volume para a poesia na divLeft (volume invertido)
+
+divBottom.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return;
+
+    const rect = divBottom.getBoundingClientRect();
+    const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50);
+    legendasVideo.style.opacity = opacity; 
+    updateProgressBar(progressLegendas, opacity, false); 
+});
+
+divBottom.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return;
+
+    handleTouchMove(e, divBottom, (opacity) => {
+        legendasVideo.style.opacity = opacity; 
+        updateProgressBar(progressLegendas, opacity, false);
+    }, false);
+});
+
+
+
 divLeft.addEventListener('mousemove', (e) => {
-    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+    if (!interactionEnabled) return; 
 
     const rect = divLeft.getBoundingClientRect();
-    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); // Invertendo o valor
+    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
     poesiaAudio.volume = volume;
-    updateProgressBar(progressPoesia, volume, false); // Atualiza a altura da barra de progresso
+    updateProgressBar(progressPoesia, volume, false); 
 });
 
 divLeft.addEventListener('touchmove', (e) => {
-    if (!interactionEnabled) return; // Impede a interação se o play não foi iniciado
+    if (!interactionEnabled) return; 
 
     handleTouchMove(e, divLeft, (volume) => {
-        volume = 1 - volume; // Volume invertido
+        volume = 1 - volume;
         poesiaAudio.volume = volume;
         updateProgressBar(progressPoesia, volume, false);
     }, false);
@@ -221,3 +258,9 @@ faixaElements.forEach(faixa => {
         playTrack(trackElement); 
     });
 });
+
+
+
+
+
+

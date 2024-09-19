@@ -213,7 +213,7 @@ divRight.addEventListener('mousemove', (e) => {
 
     const rect = divRight.getBoundingClientRect();
     const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
-    videoElement.style.opacity = opacity;
+    videoElement.style.opacity = 1 - opacity;
     updateProgressBar(progressVideo, opacity, false);
 
     cursor.style.width = `${2 + opacity * 4}em`;
@@ -234,7 +234,7 @@ divBottom.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
 
     const rect = divBottom.getBoundingClientRect();
-    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50);
+    const opacity = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
     legendasVideo.style.opacity = opacity;
     updateProgressBar(progressLegendas, opacity, true);
 
@@ -246,10 +246,11 @@ divBottom.addEventListener('touchmove', (e) => {
     if (!interactionEnabled) return;
 
     handleTouchMove(e, divBottom, (opacity) => {
-        legendasVideo.style.opacity = 1 - opacity;
-        updateProgressBar(progressLegendas, 1 - opacity, true);
-    }, true);
+        legendasVideo.style.opacity = opacity;
+        updateProgressBar(progressLegendas, opacity, true);
+    }, false); 
 });
+
 
 
 divLeft.addEventListener('mousemove', (e) => {

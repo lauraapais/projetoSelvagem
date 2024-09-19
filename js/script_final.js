@@ -163,6 +163,21 @@ function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = 
     }
 }
 
+// Adicionando o cursor customizado
+const cursor = document.getElementById("cursor");
+document.addEventListener("mousemove", (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    cursor.style.left = mouseX + "px";
+    cursor.style.top = mouseY + "px";
+});
+
+// Função para ajustar o tamanho do cursor
+function adjustCursorSize(value) {
+    cursor.style.width = `${2 + value * 4}em`;
+    cursor.style.height = `${2 + value * 4}em`;
+}
+
 const divTop = document.querySelector('.divTop');
 const divRight = document.querySelector('.divRight');
 const divLeft = document.querySelector('.divLeft');
@@ -173,13 +188,16 @@ const progressVideo = divRight.querySelector('.progress');
 const progressPoesia = divLeft.querySelector('.progress');
 const progressLegendas = divBottom.querySelector('.progress');
 
+// Interação com divTop (controle do volume do jazzAudio)
 divTop.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
 
     const rect = divTop.getBoundingClientRect();
-    const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
+    const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);  // Limita em 50px nas bordas
     jazzAudio.volume = volume;
     updateProgressBar(progressJazz, volume, true); 
+
+    adjustCursorSize(volume);  // Ajusta o tamanho do cursor
 });
 
 divTop.addEventListener('touchmove', (e) => {
@@ -188,16 +206,20 @@ divTop.addEventListener('touchmove', (e) => {
     handleTouchMove(e, divTop, (volume) => {
         jazzAudio.volume = volume;
         updateProgressBar(progressJazz, volume, true);
+        adjustCursorSize(volume);
     }, true);
 });
 
+// Interação com divRight (controle da opacidade do videoElement)
 divRight.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return; 
 
     const rect = divRight.getBoundingClientRect();
-    const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
+    const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); // Limita em 50px nas bordas
     videoElement.style.opacity = opacity;
     updateProgressBar(progressVideo, opacity, false);
+
+    adjustCursorSize(opacity);  // Ajusta o tamanho do cursor
 });
 
 divRight.addEventListener('touchmove', (e) => {
@@ -206,17 +228,20 @@ divRight.addEventListener('touchmove', (e) => {
     handleTouchMove(e, divRight, (opacity) => {
         videoElement.style.opacity = opacity;
         updateProgressBar(progressVideo, opacity, false);
+        adjustCursorSize(opacity);
     }, false);
 });
 
-
+// Interação com divBottom (controle da opacidade das legendas)
 divBottom.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
 
     const rect = divBottom.getBoundingClientRect();
-    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50);
+    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50);  // Limita em 50px nas bordas
     legendasVideo.style.opacity = opacity;
     updateProgressBar(progressLegendas, opacity, true);
+
+    adjustCursorSize(opacity);  // Ajusta o tamanho do cursor
 });
 
 divBottom.addEventListener('touchmove', (e) => {
@@ -224,18 +249,21 @@ divBottom.addEventListener('touchmove', (e) => {
 
     handleTouchMove(e, divBottom, (opacity) => {
         legendasVideo.style.opacity = 1 - opacity; 
-        updateProgressBar(progressLegendas, 1 - opacity, true); 
+        updateProgressBar(progressLegendas, 1 - opacity, true);
+        adjustCursorSize(1 - opacity);
     }, true);
 });
 
-
+// Interação com divLeft (controle do volume da poesiaAudio)
 divLeft.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return; 
 
     const rect = divLeft.getBoundingClientRect();
-    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
+    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50);  // Limita em 50px nas bordas
     poesiaAudio.volume = volume;
-    updateProgressBar(progressPoesia, volume, false); 
+    updateProgressBar(progressPoesia, volume, false);
+
+    adjustCursorSize(volume);  // Ajusta o tamanho do cursor
 });
 
 divLeft.addEventListener('touchmove', (e) => {
@@ -245,22 +273,18 @@ divLeft.addEventListener('touchmove', (e) => {
         volume = 1 - volume;
         poesiaAudio.volume = volume;
         updateProgressBar(progressPoesia, volume, false);
+        adjustCursorSize(volume);
     }, false);
 });
 
-faixaElements.forEach(faixa => {
-    faixa.addEventListener('click', () => {
-        if (!interactionEnabled) return; 
+const hoverLinks = document.querySelectorAll('.hover-link');
 
-        const trackId = faixa.getAttribute('data-track');
-        const trackElement = document.getElementById(trackId);
+hoverLinks.forEach((link) => {
+    link.addEventListener('mouseenter', () => {
+        cursor.classList.add("active");
+    });
 
-        playTrack(trackElement); 
+    link.addEventListener('mouseleave', () => {
+        cursor.classList.remove("active");
     });
 });
-
-
-
-
-
-

@@ -172,7 +172,8 @@ main{
 }
 
 .track video {
-    height: calc(var(--vh, 1h)*100 - 100px)!important;
+    object-fit: cover;
+    height: calc(var(--vh, 1h)*100 - 100px);
     width: calc(100vw - 100px);
 }
 
@@ -180,13 +181,6 @@ main{
     position: absolute;
     opacity: 0;
     top: 50px;
-}
-
-.legendas{
-    object-fit: cover;
-    height: calc(var(--vh, 1h)*100 - 100px);
-    width: calc(100vw - 100px);
-
 }
 
 .track .legenda {

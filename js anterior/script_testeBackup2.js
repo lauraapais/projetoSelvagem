@@ -22,11 +22,14 @@ function setInitialProgress() {
     jazzAudio.volume = 0.7; 
     poesiaAudio.volume = 0.5; 
     videoElement.style.opacity = 1.0;
+    legendasVideo.style.opacity = 0.3; 
 
     updateProgressBar(progressJazz, 0.7, true);
     updateProgressBar(progressPoesia, 0.5, false);
     updateProgressBar(progressVideo, 1.0, false); 
+    updateProgressBar(progressLegendas, 0.3, true);
 }
+
 
 function ensureMediaReady(mediaElement, callback) {
     if (mediaElement.readyState >= 3) { 
@@ -37,13 +40,15 @@ function ensureMediaReady(mediaElement, callback) {
 }
 
 function checkMediaReady() {
-    if (jazzAudio.readyState >= 3 && poesiaAudio.readyState >= 3 && videoElement.readyState >= 3) {
+    if (jazzAudio.readyState >= 3 && poesiaAudio.readyState >= 3 && videoElement.readyState >= 3 && legendasVideo.readyState >= 3) {
         loadingText.style.display = 'none';
         
         videoElement.play();
         videoElement.style.display = 'block';
         videoElement.style.opacity = '1';
+        legendasVideo.play();
         legendasVideo.style.display = 'block';
+        legendasVideo.style.opacity = '1';
 
         jazzAudio.play();
         poesiaAudio.play();
@@ -66,9 +71,15 @@ startButton.addEventListener('click', () => {
     }
     videoElement.load(); 
 
+    if (!legendasVideo.src) {
+        legendasVideo.src = legendasVideo.getAttribute('data-src');
+    }
+    legendasVideo.load(); 
+
     ensureMediaReady(jazzAudio, checkMediaReady);
     ensureMediaReady(poesiaAudio, checkMediaReady);
     ensureMediaReady(videoElement, checkMediaReady);
+    ensureMediaReady(legendasVideo, checkMediaReady);
 
     startButton.style.display = 'none';
 });
@@ -87,6 +98,12 @@ function stopCurrentTrack() {
         videoElement.currentTime = 0; 
         videoElement.src = ''; 
         videoElement.load(); 
+    }
+    if (legendasVideo) {
+        legendasVideo.pause();
+        legendasVideo.currentTime = 0; 
+        legendasVideo.src = ''; 
+        legendasVideo.load(); 
     }
 
     videoElement.style.display = 'none';
@@ -108,9 +125,13 @@ function playTrack(trackElement) {
     videoElement.src = videoElement.getAttribute('data-src'); 
     videoElement.load();
 
+    legendasVideo.src = legendasVideo.getAttribute('data-src'); 
+    legendasVideo.load();
+
     ensureMediaReady(jazzAudio, checkMediaReady);
     ensureMediaReady(poesiaAudio, checkMediaReady);
     ensureMediaReady(videoElement, checkMediaReady);
+    ensureMediaReady(legendasVideo, checkMediaReady);
 }
 
 function adjustValue(position, start, end) {
@@ -145,10 +166,12 @@ function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = 
 const divTop = document.querySelector('.divTop');
 const divRight = document.querySelector('.divRight');
 const divLeft = document.querySelector('.divLeft');
+const divBottom = document.querySelector('.divBottom');
 
 const progressJazz = divTop.querySelector('.progress');
 const progressVideo = divRight.querySelector('.progress');
 const progressPoesia = divLeft.querySelector('.progress');
+const progressLegendas = divBottom.querySelector('.progress');
 
 divTop.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
@@ -186,6 +209,26 @@ divRight.addEventListener('touchmove', (e) => {
     }, false);
 });
 
+
+divBottom.addEventListener('mousemove', (e) => {
+    if (!interactionEnabled) return;
+
+    const rect = divBottom.getBoundingClientRect();
+    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50); // Inverte a opacidade
+    legendasVideo.style.opacity = opacity;
+    updateProgressBar(progressLegendas, opacity, true);
+});
+
+divBottom.addEventListener('touchmove', (e) => {
+    if (!interactionEnabled) return;
+
+    handleTouchMove(e, divBottom, (opacity) => {
+        legendasVideo.style.opacity = 1 - opacity; // Inverte a opacidade
+        updateProgressBar(progressLegendas, opacity, true);
+    }, true);
+});
+
+
 divLeft.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return; 
 
@@ -215,3 +258,9 @@ faixaElements.forEach(faixa => {
         playTrack(trackElement); 
     });
 });
+
+
+
+
+
+

@@ -22,13 +22,14 @@ function setInitialProgress() {
     jazzAudio.volume = 0.7; 
     poesiaAudio.volume = 0.5; 
     videoElement.style.opacity = 1.0;
-    legendasVideo.style.opacity = 1.0;
+    legendasVideo.style.opacity = 0.3; 
 
     updateProgressBar(progressJazz, 0.7, true);
     updateProgressBar(progressPoesia, 0.5, false);
     updateProgressBar(progressVideo, 1.0, false); 
-    updateProgressBar(legendasVideo, 1.0, false); 
+    updateProgressBar(progressLegendas, 0.3, true);
 }
+
 
 function ensureMediaReady(mediaElement, callback) {
     if (mediaElement.readyState >= 3) { 
@@ -213,20 +214,19 @@ divBottom.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
 
     const rect = divBottom.getBoundingClientRect();
-    const opacity = adjustValue(e.clientY, rect.top + 50, rect.bottom - 50);
-    legendasVideo.style.opacity = opacity; 
-    updateProgressBar(progressLegendas, opacity, false); 
+    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50); // Inverte a opacidade
+    legendasVideo.style.opacity = opacity;
+    updateProgressBar(progressLegendas, opacity, true);
 });
 
 divBottom.addEventListener('touchmove', (e) => {
     if (!interactionEnabled) return;
 
     handleTouchMove(e, divBottom, (opacity) => {
-        legendasVideo.style.opacity = opacity; 
-        updateProgressBar(progressLegendas, opacity, false);
-    }, false);
+        legendasVideo.style.opacity = 1 - opacity; // Inverte a opacidade
+        updateProgressBar(progressLegendas, opacity, true);
+    }, true);
 });
-
 
 
 divLeft.addEventListener('mousemove', (e) => {

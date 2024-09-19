@@ -223,7 +223,7 @@ divBottom.addEventListener('touchmove', (e) => {
     if (!interactionEnabled) return;
 
     handleTouchMove(e, divBottom, (opacity) => {
-        legendasVideo.style.opacity = 1 - opacity; // Inverte a opacidade
+        legendasVideo.style.opacity = opacity; // Inverte a opacidade
         updateProgressBar(progressLegendas, opacity, true);
     }, true);
 });

@@ -163,6 +163,20 @@ function handleTouchMove(event, progressElement, adjustFunction, isHorizontal = 
     }
 }
 
+// Adicionando o cursor customizado
+const cursor = document.getElementById("cursor");
+document.addEventListener("mousemove", (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    cursor.style.left = mouseX + "px";
+    cursor.style.top = mouseY + "px";
+});
+
+function adjustCursorSize(value) {
+    cursor.style.width = `${2 + value * 4}em`;
+    cursor.style.height = `${2 + value * 4}em`;
+}
+
 const divTop = document.querySelector('.divTop');
 const divRight = document.querySelector('.divRight');
 const divLeft = document.querySelector('.divLeft');
@@ -177,12 +191,11 @@ divTop.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
 
     const rect = divTop.getBoundingClientRect();
-    const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50);
+    const volume = adjustValue(e.clientX, rect.left + 50, rect.right - 50); 
     jazzAudio.volume = volume;
     updateProgressBar(progressJazz, volume, true); 
 
-    cursor.style.width = `${2 + volume * 4}em`;
-    cursor.style.height = `${2 + volume * 4}em`;
+    adjustCursorSize(volume);  
 });
 
 divTop.addEventListener('touchmove', (e) => {
@@ -191,6 +204,7 @@ divTop.addEventListener('touchmove', (e) => {
     handleTouchMove(e, divTop, (volume) => {
         jazzAudio.volume = volume;
         updateProgressBar(progressJazz, volume, true);
+        adjustCursorSize(volume);
     }, true);
 });
 
@@ -202,8 +216,7 @@ divRight.addEventListener('mousemove', (e) => {
     videoElement.style.opacity = opacity;
     updateProgressBar(progressVideo, opacity, false);
 
-    cursor.style.width = `${2 + volume * 4}em`;
-    cursor.style.height = `${2 + volume * 4}em`;
+    adjustCursorSize(opacity); 
 });
 
 divRight.addEventListener('touchmove', (e) => {
@@ -212,6 +225,7 @@ divRight.addEventListener('touchmove', (e) => {
     handleTouchMove(e, divRight, (opacity) => {
         videoElement.style.opacity = opacity;
         updateProgressBar(progressVideo, opacity, false);
+        adjustCursorSize(opacity);
     }, false);
 });
 
@@ -220,34 +234,32 @@ divBottom.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
 
     const rect = divBottom.getBoundingClientRect();
-    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50);
+    const opacity = 1 - adjustValue(e.clientX, rect.left + 50, rect.right - 50);  
     legendasVideo.style.opacity = opacity;
     updateProgressBar(progressLegendas, opacity, true);
 
-    cursor.style.width = `${2 + volume * 4}em`;
-    cursor.style.height = `${2 + volume * 4}em`;
+    adjustCursorSize(opacity);
 });
 
 divBottom.addEventListener('touchmove', (e) => {
     if (!interactionEnabled) return;
 
     handleTouchMove(e, divBottom, (opacity) => {
-        legendasVideo.style.opacity = 1 - opacity;
+        legendasVideo.style.opacity = 1 - opacity; 
         updateProgressBar(progressLegendas, 1 - opacity, true);
+        adjustCursorSize(1 - opacity);
     }, true);
 });
-
 
 divLeft.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return; 
 
     const rect = divLeft.getBoundingClientRect();
-    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
+    const volume = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50);  
     poesiaAudio.volume = volume;
-    updateProgressBar(progressPoesia, volume, false); 
+    updateProgressBar(progressPoesia, volume, false);
 
-    cursor.style.width = `${2 + volume * 4}em`;
-    cursor.style.height = `${2 + volume * 4}em`;
+    adjustCursorSize(volume);  
 });
 
 divLeft.addEventListener('touchmove', (e) => {
@@ -257,22 +269,18 @@ divLeft.addEventListener('touchmove', (e) => {
         volume = 1 - volume;
         poesiaAudio.volume = volume;
         updateProgressBar(progressPoesia, volume, false);
+        adjustCursorSize(volume);
     }, false);
 });
 
-faixaElements.forEach(faixa => {
-    faixa.addEventListener('click', () => {
-        if (!interactionEnabled) return; 
+const hoverLinks = document.querySelectorAll('.hover-link');
 
-        const trackId = faixa.getAttribute('data-track');
-        const trackElement = document.getElementById(trackId);
+hoverLinks.forEach((link) => {
+    link.addEventListener('mouseenter', () => {
+        cursor.classList.add("active");
+    });
 
-        playTrack(trackElement); 
+    link.addEventListener('mouseleave', () => {
+        cursor.classList.remove("active");
     });
 });
-
-
-
-
-
-

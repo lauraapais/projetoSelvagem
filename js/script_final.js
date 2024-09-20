@@ -209,11 +209,11 @@ divTop.addEventListener('touchmove', (e) => {
 });
 
 divRight.addEventListener('mousemove', (e) => {
-    if (!interactionEnabled) return; 
+    if (!interactionEnabled) return;
 
     const rect = divRight.getBoundingClientRect();
-    const opacity = 1-adjustValue(e.clientY, rect.top + 50, rect.bottom - 50); 
-    videoElement.style.opacity =  opacity;
+    const opacity = 1 - adjustValue(e.clientY, rect.top + 50, rect.bottom - 50);
+    videoElement.style.opacity = opacity;
     updateProgressBar(progressVideo, opacity, false);
 
     cursor.style.width = `${2 + opacity * 4}em`;
@@ -221,14 +221,13 @@ divRight.addEventListener('mousemove', (e) => {
 });
 
 divRight.addEventListener('touchmove', (e) => {
-    if (!interactionEnabled) return; 
+    if (!interactionEnabled) return;
 
     handleTouchMove(e, divRight, (opacity) => {
-        videoElement.style.opacity = 1 - opacity;
-        updateProgressBar(progressVideo, opacity, false);
+        videoElement.style.opacity = 1 -opacity;
+        updateProgressBar(progressVideo, 1 - opacity, false);
     }, false);
 });
-
 
 divBottom.addEventListener('mousemove', (e) => {
     if (!interactionEnabled) return;
@@ -248,9 +247,8 @@ divBottom.addEventListener('touchmove', (e) => {
     handleTouchMove(e, divBottom, (opacity) => {
         legendasVideo.style.opacity = opacity;
         updateProgressBar(progressLegendas, opacity, true);
-    }, false); 
+    }, true);  // A interação na divBottom é horizontal, então passamos true
 });
-
 
 
 divLeft.addEventListener('mousemove', (e) => {

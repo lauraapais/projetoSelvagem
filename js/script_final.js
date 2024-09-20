@@ -224,7 +224,7 @@ divRight.addEventListener('touchmove', (e) => {
     if (!interactionEnabled) return; 
 
     handleTouchMove(e, divRight, (opacity) => {
-        videoElement.style.opacity = opacity;
+        videoElement.style.opacity = 1 - opacity;
         updateProgressBar(progressVideo, opacity, false);
     }, false);
 });
